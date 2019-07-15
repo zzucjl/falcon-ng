@@ -50,7 +50,7 @@ func aconf() {
 		return
 	}
 
-	fmt.Println("no configuration file available")
+	fmt.Println("no configuration file for judge")
 	os.Exit(1)
 }
 

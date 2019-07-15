@@ -50,7 +50,7 @@ func aconf() {
 		return
 	}
 
-	fmt.Println("no configuration file available")
+	fmt.Println("no configuration file for tsdb")
 	os.Exit(1)
 }
 
