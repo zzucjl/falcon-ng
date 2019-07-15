@@ -40,12 +40,12 @@ func aconf() {
 		return
 	}
 
-	*conf = "etc/collector.local.yml"
+	*conf = "etc/logcollector.local.yml"
 	if file.IsExist(*conf) {
 		return
 	}
 
-	*conf = "etc/collector.yml"
+	*conf = "etc/logcollector.yml"
 	if file.IsExist(*conf) {
 		return
 	}
@@ -61,7 +61,7 @@ func main() {
 
 func start() {
 	runner.Init()
-	fmt.Println("collector start, use configuration file:", *conf)
+	fmt.Println("logcollector start, use configuration file:", *conf)
 	fmt.Println("runner.Cwd:", runner.Cwd)
 	fmt.Println("runner.Hostname:", runner.Hostname)
 }
