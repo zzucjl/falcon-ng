@@ -15,6 +15,7 @@ import (
 
 	"github.com/open-falcon/falcon-ng/src/model"
 	"github.com/open-falcon/falcon-ng/src/modules/portal/config"
+	"github.com/open-falcon/falcon-ng/src/modules/portal/http"
 )
 
 const version = 1
@@ -55,15 +56,21 @@ func main() {
 	model.InitMySQL("uic", "portal", "mon")
 	model.InitRoot()
 
+	http.Start()
+	ending()
+}
+
+func ending() {
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
 	select {
 	case <-c:
-		logger.Info("stop signal caught, stopping...")
+		fmt.Printf("stop signal caught, stopping... pid=%d\n", os.Getpid())
 	}
 
-	logger.Info("portal stopped successfully")
 	logger.Close()
+	http.Shutdown()
+	fmt.Println("portal stopped successfully")
 }
 
 // auto detect configuration file
