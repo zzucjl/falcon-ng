@@ -11,6 +11,8 @@ usage()
 
 start_all()
 {
+	# http: 8022
+	test -x falcon-ng-portal && start portal
 	# http: 8030 ; rpc: 8031
 	test -x falcon-ng-index && start index
 	# http: 8036 ; rpc: 8037
@@ -19,8 +21,10 @@ start_all()
 	test -x falcon-ng-transfer && start transfer
 	# http: 8032
 	test -x falcon-ng-judge && start judge
-	# http: 8042
-	test -x falcon-ng-collector && start collector
+	# http: 2188
+	test -x falcon-ng-syscollector && start syscollector
+	# http: 2189
+	test -x falcon-ng-logcollector && start logcollector
 }
 
 start()
@@ -66,11 +70,13 @@ start()
 
 stop_all()
 {
-	test -x falcon-ng-collector && stop collector
+	test -x falcon-ng-logcollector && stop logcollector
+	test -x falcon-ng-syscollector && stop syscollector
 	test -x falcon-ng-transfer && stop transfer
 	test -x falcon-ng-tsdb && stop tsdb
 	test -x falcon-ng-judge && stop judge
 	test -x falcon-ng-index && stop index
+	test -x falcon-ng-portal && stop portal
 }
 
 stop()
@@ -141,11 +147,13 @@ build()
 {
 	mod=$1
 	if [ "x${mod}" = "x" ]; then
-		build_one collector
+		build_one logcollector
+		build_one syscollector
 		build_one tsdb
 		build_one index
 		build_one judge
 		build_one transfer
+		build_one portal
 		return
 	fi
 
@@ -170,11 +178,13 @@ pack()
 	tar zcvf falcon-ng-$v.tar.gz control \
 	plugin \
 	supervisord.d \
-	falcon-ng-collector etc/collector.yml \
+	falcon-ng-logcollector etc/logcollector.yml \
+	falcon-ng-syscollector etc/syscollector.yml \
 	falcon-ng-tsdb etc/tsdb.yml \
 	falcon-ng-index etc/index.yml \
 	falcon-ng-judge etc/judge.yml \
-	falcon-ng-transfer etc/transfer.yml
+	falcon-ng-transfer etc/transfer.yml \
+	falcon-ng-portal etc/portal.yml
 }
 
 case "$1" in
