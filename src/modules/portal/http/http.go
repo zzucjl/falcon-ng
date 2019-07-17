@@ -7,15 +7,31 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+
+	"github.com/open-falcon/falcon-ng/src/modules/portal/config"
+	"github.com/open-falcon/falcon-ng/src/modules/portal/http/middleware"
 )
 
 var srv = &http.Server{
-	Addr: ":8080",
+	ReadTimeout:    10 * time.Second,
+	WriteTimeout:   10 * time.Second,
+	MaxHeaderBytes: 1 << 20,
 }
 
 // Start http server
 func Start() {
-	r := gin.Default()
+	c := config.Get()
+
+	loggerMid := middleware.Logger()
+	recoveryMid := middleware.Recovery()
+
+	if c.Logger.Level != "DEBUG" {
+		gin.SetMode(gin.ReleaseMode)
+		middleware.DisableConsoleColor()
+	}
+
+	r := gin.New()
+	r.Use(loggerMid, recoveryMid)
 
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
@@ -37,10 +53,11 @@ func Start() {
 		})
 	})
 
+	srv.Addr = c.HTTP.Listen
 	srv.Handler = r
 
 	go func() {
-		// service connections
+		log.Println("starting http server, listening on:", srv.Addr)
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("listening %s occur error: %s\n", srv.Addr, err)
 		}
