@@ -4,9 +4,17 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"os/signal"
+	"syscall"
+
+	_ "github.com/go-sql-driver/mysql"
 
 	"github.com/toolkits/pkg/file"
+	"github.com/toolkits/pkg/logger"
 	"github.com/toolkits/pkg/runner"
+
+	"github.com/open-falcon/falcon-ng/src/model"
+	"github.com/open-falcon/falcon-ng/src/modules/portal/config"
 )
 
 const version = 1
@@ -32,6 +40,30 @@ func init() {
 		flag.Usage()
 		os.Exit(0)
 	}
+
+	runner.Init()
+	fmt.Println("portal start, use configuration file:", *conf)
+	fmt.Println("runner.Cwd:", runner.Cwd)
+	fmt.Println("runner.Hostname:", runner.Hostname)
+}
+
+func main() {
+	aconf()
+	pconf()
+
+	config.InitLogger()
+	model.InitMySQL("uic", "portal", "mon")
+	model.InitRoot()
+
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
+	select {
+	case <-c:
+		logger.Info("stop signal caught, stopping...")
+	}
+
+	logger.Info("portal stopped successfully")
+	logger.Close()
 }
 
 // auto detect configuration file
@@ -54,14 +86,10 @@ func aconf() {
 	os.Exit(1)
 }
 
-func main() {
-	aconf()
-	start()
-}
-
-func start() {
-	runner.Init()
-	fmt.Println("portal start, use configuration file:", *conf)
-	fmt.Println("runner.Cwd:", runner.Cwd)
-	fmt.Println("runner.Hostname:", runner.Hostname)
+// parse configuration file
+func pconf() {
+	if err := config.Parse(*conf); err != nil {
+		fmt.Println("cannot parse configuration file:", err)
+		os.Exit(1)
+	}
 }
