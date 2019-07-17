@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	"pkg/file"
-	"pkg/runner"
+	"github.com/toolkits/pkg/file"
+	"github.com/toolkits/pkg/runner"
 )
 
 const version = 1
