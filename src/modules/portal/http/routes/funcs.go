@@ -10,6 +10,30 @@ import (
 	"github.com/open-falcon/falcon-ng/src/model"
 )
 
+func urlParamStr(c *gin.Context, field string) string {
+	val := c.Param(field)
+
+	if val == "" {
+		errors.Bomb("[%s] is blank", field)
+	}
+
+	return val
+}
+
+func urlParamInt64(c *gin.Context, field string) int64 {
+	strval := urlParamStr(c, field)
+	intval, err := strconv.ParseInt(strval, 10, 64)
+	if err != nil {
+		errors.Bomb("cannot convert %s to int64", strval)
+	}
+
+	return intval
+}
+
+func urlParamInt(c *gin.Context, field string) int {
+	return int(urlParamInt64(c, field))
+}
+
 func queryInt(c *gin.Context, key string, defaultVal int) int {
 	strv := c.Query(key)
 	if strv == "" {
@@ -64,15 +88,13 @@ func renderData(c *gin.Context, data interface{}, err error) {
 	renderMessage(c, err.Error())
 }
 
-func loginUser(c *gin.Context) *model.User {
-	username, has := c.Get("username")
-	if !has {
-		return nil
-	}
+func loginUsername(c *gin.Context) string {
+	username, _ := c.Get("username")
+	return username.(string)
+}
 
-	if username == "" {
-		return nil
-	}
+func loginUser(c *gin.Context) *model.User {
+	username := loginUsername(c)
 
 	user, err := model.UserGet("username", username)
 	errors.Dangerous(err)
@@ -88,6 +110,19 @@ func loginRoot(c *gin.Context) *model.User {
 	user := loginUser(c)
 	if user.IsRoot == 0 {
 		errors.Bomb("no privilege")
+	}
+
+	return user
+}
+
+func mustUser(id int64) *model.User {
+	user, err := model.UserGet("id", id)
+	if err != nil {
+		errors.Bomb("cannot retrieve user[%d]: %v", id, err)
+	}
+
+	if user == nil {
+		errors.Bomb("no such user[%d]", id)
 	}
 
 	return user

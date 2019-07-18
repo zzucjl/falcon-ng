@@ -24,17 +24,21 @@ func Config(r *gin.Engine) {
 		auth.GET("/logout", logout)
 	}
 
-	self := r.Group("/api/portal/self").Use(middleware.GetCookie())
+	self := r.Group("/api/portal/self").Use(middleware.GetCookieUser())
 	{
 		self.GET("/profile", selfProfileGet)
 		self.PUT("/profile", selfProfilePut)
 		self.PUT("/password", selfPasswordPut)
 	}
 
-	user := r.Group("/api/portal/user").Use(middleware.GetCookie())
+	user := r.Group("/api/portal/user").Use(middleware.GetCookieUser())
 	{
 		user.GET("", userListGet)
 		user.POST("", userAddPost)
+		user.GET("/:id/profile", userProfileGet)
+		user.PUT("/:id/profile", userProfilePut)
+		user.PUT("/:id/password", userPasswordPut)
+		user.DELETE("/:id", userDel)
 	}
 
 }

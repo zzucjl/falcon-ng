@@ -82,6 +82,27 @@ func (u *User) Save() error {
 	return err
 }
 
+func (u *User) Del() error {
+	session := DB["uic"].NewSession()
+	defer session.Close()
+
+	if err := session.Begin(); err != nil {
+		return err
+	}
+
+	if _, err := session.Exec("DELETE FROM team_user WHERE user_id=?", u.Id); err != nil {
+		session.Rollback()
+		return err
+	}
+
+	if _, err := session.Exec("DELETE FROM user WHERE id=?", u.Id); err != nil {
+		session.Rollback()
+		return err
+	}
+
+	return session.Commit()
+}
+
 func InitRoot() {
 	var u User
 	has, err := DB["uic"].Where("username=?", "root").Get(&u)
