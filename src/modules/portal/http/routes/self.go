@@ -18,3 +18,7 @@ func version(c *gin.Context) {
 func pid(c *gin.Context) {
 	c.String(200, "%d", os.Getpid())
 }
+
+func addr(c *gin.Context) {
+	c.String(200, c.Request.RemoteAddr)
+}

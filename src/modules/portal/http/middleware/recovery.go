@@ -19,6 +19,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/toolkits/pkg/errors"
 )
 
 var (
@@ -42,6 +43,12 @@ func RecoveryWithWriter(out io.Writer) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		defer func() {
 			if err := recover(); err != nil {
+				// custom error
+				if e, ok := err.(errors.PageError); ok {
+					c.JSON(200, gin.H{"err": e.Message})
+					return
+				}
+
 				// Check for a broken connection, as it is not really a
 				// condition that warrants a panic stack trace.
 				var brokenPipe bool

@@ -14,6 +14,13 @@ func Config(r *gin.Engine) {
 		self.GET("/ping", ping)
 		self.GET("/version", version)
 		self.GET("/pid", pid)
+		self.GET("/addr", addr)
+	}
+
+	auth := r.Group("/api/portal/auth")
+	{
+		auth.POST("/login", login)
+		auth.GET("/logout", logout)
 	}
 
 }
