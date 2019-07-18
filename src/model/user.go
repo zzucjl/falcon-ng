@@ -140,3 +140,38 @@ func PassLogin(user, pass string) error {
 
 	return nil
 }
+
+func UserGet(col string, val interface{}) (*User, error) {
+	var obj User
+	has, err := DB["uic"].Where(col+"=?", val).Get(&obj)
+	if err != nil {
+		return nil, err
+	}
+
+	if !has {
+		return nil, nil
+	}
+
+	return &obj, nil
+}
+
+func UserTotal(query string) (int64, error) {
+	if query != "" {
+		q := "%" + query + "%"
+		return DB["uic"].Where("username like ? or dispname like ? or phone like ? or email like ?", q, q, q, q).Count(new(User))
+	}
+
+	return DB["uic"].Count(new(User))
+}
+
+func UserGets(query string, limit, offset int) ([]User, error) {
+	session := DB["uic"].Limit(limit, offset).OrderBy("username")
+	if query != "" {
+		q := "%" + query + "%"
+		session = session.Where("username like ? or dispname like ? or phone like ? or email like ?", q, q, q, q)
+	}
+
+	var users []User
+	err := session.Find(&users)
+	return users, err
+}
