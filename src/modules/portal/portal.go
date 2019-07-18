@@ -53,6 +53,7 @@ func main() {
 	config.InitLogger()
 	model.InitMySQL("uic", "portal", "mon")
 	model.InitRoot()
+	model.InitNode()
 
 	http.Start()
 	ending()
