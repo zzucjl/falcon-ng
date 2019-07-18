@@ -6,10 +6,13 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 
 	"github.com/open-falcon/falcon-ng/src/modules/portal/config"
 	"github.com/open-falcon/falcon-ng/src/modules/portal/http/middleware"
+	"github.com/open-falcon/falcon-ng/src/modules/portal/http/routes"
 )
 
 var srv = &http.Server{
@@ -24,6 +27,8 @@ func Start() {
 
 	loggerMid := middleware.Logger()
 	recoveryMid := middleware.Recovery()
+	store := cookie.NewStore([]byte(c.HTTP.Secret))
+	sessionMid := sessions.Sessions("falcon-ng", store)
 
 	if c.Logger.Level != "DEBUG" {
 		gin.SetMode(gin.ReleaseMode)
@@ -31,27 +36,9 @@ func Start() {
 	}
 
 	r := gin.New()
-	r.Use(loggerMid, recoveryMid)
+	r.Use(loggerMid, recoveryMid, sessionMid)
 
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
-
-	r.GET("/sleep", func(c *gin.Context) {
-		time.Sleep(3 * time.Second)
-		c.JSON(200, gin.H{
-			"message": "sleep",
-		})
-	})
-
-	r.GET("/sleep2", func(c *gin.Context) {
-		time.Sleep(6 * time.Second)
-		c.JSON(200, gin.H{
-			"message": "sleep2",
-		})
-	})
+	routes.Config(r)
 
 	srv.Addr = c.HTTP.Listen
 	srv.Handler = r
