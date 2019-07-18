@@ -13,7 +13,7 @@ import (
 
 func userListGet(c *gin.Context) {
 	limit := queryInt(c, "limit", 20)
-	query := c.Query("query")
+	query := queryStr(c, "query", "")
 
 	total, err := model.UserTotal(query)
 	errors.Dangerous(err)
@@ -53,7 +53,7 @@ func userAddPost(c *gin.Context) {
 		IsRoot:   f.IsRoot,
 	}
 
-	renderError(c, u.Save())
+	renderMessage(c, u.Save())
 }
 
 func userInviteGet(c *gin.Context) {
@@ -92,7 +92,7 @@ func userInvitePost(c *gin.Context) {
 		Im:       f.Im,
 	}
 
-	renderError(c, u.Save())
+	renderMessage(c, u.Save())
 }
 
 func userProfileGet(c *gin.Context) {
@@ -119,7 +119,7 @@ func userProfilePut(c *gin.Context) {
 	target.Email = f.Email
 	target.Im = f.Im
 	target.IsRoot = f.IsRoot
-	renderError(c, target.Update("dispname", "phone", "email", "im", "is_root"))
+	renderMessage(c, target.Update("dispname", "phone", "email", "im", "is_root"))
 }
 
 type userPasswordForm struct {
@@ -134,7 +134,7 @@ func userPasswordPut(c *gin.Context) {
 
 	target := mustUser(urlParamInt64(c, "id"))
 	target.Password = config.CryptoPass(f.Password)
-	renderError(c, target.Update("password"))
+	renderMessage(c, target.Update("password"))
 }
 
 func userDel(c *gin.Context) {
@@ -145,7 +145,7 @@ func userDel(c *gin.Context) {
 	errors.Dangerous(err)
 
 	if target == nil {
-		renderError(c, nil)
+		renderMessage(c, nil)
 		return
 	}
 
@@ -153,5 +153,5 @@ func userDel(c *gin.Context) {
 		errors.Bomb("cannot delete root user")
 	}
 
-	renderError(c, target.Del())
+	renderMessage(c, target.Del())
 }

@@ -41,4 +41,12 @@ func Config(r *gin.Engine) {
 		user.DELETE("/:id", userDel)
 	}
 
+	team := r.Group("/api/portal/team").Use(middleware.GetCookieUser())
+	{
+		team.GET("", teamListGet)
+		team.POST("", teamAddPost)
+		team.PUT("/:id", teamPut)
+		team.DELETE("/:id", teamDel)
+	}
+
 }

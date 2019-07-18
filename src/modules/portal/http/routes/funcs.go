@@ -34,6 +34,15 @@ func urlParamInt(c *gin.Context, field string) int {
 	return int(urlParamInt64(c, field))
 }
 
+func queryStr(c *gin.Context, key string, defaultVal string) string {
+	val := c.Query(key)
+	if val == "" {
+		return defaultVal
+	}
+
+	return val
+}
+
 func queryInt(c *gin.Context, key string, defaultVal int) int {
 	strv := c.Query(key)
 	if strv == "" {
@@ -66,17 +75,18 @@ func offset(c *gin.Context, limit int, total interface{}) int {
 	return pager.NewPaginator(c.Request, limit, total).Offset()
 }
 
-func renderMessage(c *gin.Context, msg string) {
-	c.JSON(200, gin.H{"err": msg})
-}
-
-func renderError(c *gin.Context, err error) {
-	if err != nil {
-		renderMessage(c, err.Error())
+func renderMessage(c *gin.Context, v interface{}) {
+	if v == nil {
+		c.JSON(200, gin.H{"err": ""})
 		return
 	}
 
-	renderMessage(c, "")
+	switch t := v.(type) {
+	case string:
+		c.JSON(200, gin.H{"err": t})
+	case error:
+		c.JSON(200, gin.H{"err": t.Error()})
+	}
 }
 
 func renderData(c *gin.Context, data interface{}, err error) {

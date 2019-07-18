@@ -103,6 +103,20 @@ func (u *User) Del() error {
 	return session.Commit()
 }
 
+func (u *User) CanModifyTeam(t *Team) (bool, error) {
+	if u.IsRoot == 1 {
+		return true, nil
+	}
+
+	session := DB["uic"].Where("team_id=? and user_id=?", t.Id, u.Id)
+	if t.Mgmt == 1 {
+		session = session.Where("is_admin=1")
+	}
+
+	cnt, err := session.Count(new(TeamUser))
+	return cnt > 0, err
+}
+
 func InitRoot() {
 	var u User
 	has, err := DB["uic"].Where("username=?", "root").Get(&u)

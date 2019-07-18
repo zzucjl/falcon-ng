@@ -28,7 +28,7 @@ func selfProfilePut(c *gin.Context) {
 	user.Email = f.Email
 	user.Im = f.Im
 
-	renderError(c, user.Update("dispname", "phone", "email", "im"))
+	renderMessage(c, user.Update("dispname", "phone", "email", "im"))
 }
 
 type selfPasswordForm struct {
@@ -49,5 +49,5 @@ func selfPasswordPut(c *gin.Context) {
 	}
 
 	user.Password = newpass
-	renderError(c, user.Update("password"))
+	renderMessage(c, user.Update("password"))
 }
