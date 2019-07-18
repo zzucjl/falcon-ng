@@ -31,4 +31,9 @@ func Config(r *gin.Engine) {
 		self.PUT("/password", selfPasswordPut)
 	}
 
+	user := r.Group("/api/portal/user").Use(middleware.GetCookie())
+	{
+		user.GET("", userListGet)
+	}
+
 }

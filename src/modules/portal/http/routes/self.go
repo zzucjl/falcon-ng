@@ -2,8 +2,9 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/open-falcon/falcon-ng/src/modules/portal/config"
 	"github.com/toolkits/pkg/errors"
+
+	"github.com/open-falcon/falcon-ng/src/modules/portal/config"
 )
 
 func selfProfileGet(c *gin.Context) {

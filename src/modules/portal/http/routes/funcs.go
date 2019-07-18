@@ -1,10 +1,46 @@
 package routes
 
 import (
+	"strconv"
+
 	"github.com/gin-gonic/gin"
-	"github.com/open-falcon/falcon-ng/src/model"
 	"github.com/toolkits/pkg/errors"
+	"github.com/toolkits/pkg/pager"
+
+	"github.com/open-falcon/falcon-ng/src/model"
 )
+
+func queryInt(c *gin.Context, key string, defaultVal int) int {
+	strv := c.Query(key)
+	if strv == "" {
+		return defaultVal
+	}
+
+	intv, err := strconv.Atoi(strv)
+	if err != nil {
+		errors.Bomb("cannot convert [%s] to int", strv)
+	}
+
+	return intv
+}
+
+func queryInt64(c *gin.Context, key string, defaultVal int64) int64 {
+	strv := c.Query(key)
+	if strv == "" {
+		return defaultVal
+	}
+
+	intv, err := strconv.ParseInt(strv, 10, 64)
+	if err != nil {
+		errors.Bomb("cannot convert [%s] to int64", strv)
+	}
+
+	return intv
+}
+
+func offset(c *gin.Context, limit int, total interface{}) int {
+	return pager.NewPaginator(c.Request, limit, total).Offset()
+}
 
 func renderMessage(c *gin.Context, msg string) {
 	c.JSON(200, gin.H{"err": msg})
