@@ -32,8 +32,8 @@ func selfProfilePut(c *gin.Context) {
 }
 
 type selfPasswordForm struct {
-	OldPass string `json:"oldpass"`
-	NewPass string `json:"newpass"`
+	OldPass string `json:"oldpass" binding:"required"`
+	NewPass string `json:"newpass" binding:"required"`
 }
 
 func selfPasswordPut(c *gin.Context) {

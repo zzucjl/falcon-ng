@@ -22,6 +22,7 @@ type User struct {
 	Phone    string `json:"phone"`
 	Email    string `json:"email"`
 	Im       string `json:"im"`
+	IsRoot   int    `json:"is_root"`
 }
 
 func (u *User) CheckFields() {
@@ -61,6 +62,26 @@ func (u *User) Update(cols ...string) error {
 	return err
 }
 
+func (u *User) Save() error {
+	u.CheckFields()
+
+	if u.Id > 0 {
+		return fmt.Errorf("user.id[%d] not equal 0", u.Id)
+	}
+
+	cnt, err := DB["uic"].Where("username=?", u.Username).Count(new(User))
+	if err != nil {
+		return err
+	}
+
+	if cnt > 0 {
+		return fmt.Errorf("username already exists")
+	}
+
+	_, err = DB["uic"].Insert(u)
+	return err
+}
+
 func InitRoot() {
 	var u User
 	has, err := DB["uic"].Where("username=?", "root").Get(&u)
@@ -76,6 +97,7 @@ func InitRoot() {
 		Username: "root",
 		Password: config.CryptoPass("falcon"),
 		Dispname: "超管",
+		IsRoot:   1,
 	}
 
 	_, err = DB["uic"].Insert(&u)

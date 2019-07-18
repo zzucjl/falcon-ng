@@ -34,6 +34,7 @@ func Config(r *gin.Engine) {
 	user := r.Group("/api/portal/user").Use(middleware.GetCookie())
 	{
 		user.GET("", userListGet)
+		user.POST("", userAddPost)
 	}
 
 }

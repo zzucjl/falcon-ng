@@ -12,6 +12,7 @@ CREATE TABLE `user` (
   `phone` varchar(16) not null default '',
   `email` varchar(64) not null default '',
   `im` varchar(64) not null default '',
+  `is_root` int(1) not null,
   PRIMARY KEY (`id`),
   UNIQUE KEY (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

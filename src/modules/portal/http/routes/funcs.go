@@ -49,6 +49,7 @@ func renderMessage(c *gin.Context, msg string) {
 func renderError(c *gin.Context, err error) {
 	if err != nil {
 		renderMessage(c, err.Error())
+		return
 	}
 
 	renderMessage(c, "")
@@ -78,6 +79,15 @@ func loginUser(c *gin.Context) *model.User {
 
 	if user == nil {
 		errors.Bomb("login first please")
+	}
+
+	return user
+}
+
+func loginRoot(c *gin.Context) *model.User {
+	user := loginUser(c)
+	if user.IsRoot == 0 {
+		errors.Bomb("no privilege")
 	}
 
 	return user
