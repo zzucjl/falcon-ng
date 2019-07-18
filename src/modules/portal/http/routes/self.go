@@ -6,7 +6,7 @@ import (
 	"github.com/toolkits/pkg/errors"
 )
 
-func profileGet(c *gin.Context) {
+func selfProfileGet(c *gin.Context) {
 	renderData(c, loginUser(c), nil)
 }
 
@@ -17,7 +17,7 @@ type selfProfileForm struct {
 	Im       string `json:"im"`
 }
 
-func profilePut(c *gin.Context) {
+func selfProfilePut(c *gin.Context) {
 	var f selfProfileForm
 	errors.Dangerous(c.ShouldBind(&f))
 
@@ -35,7 +35,7 @@ type selfPasswordForm struct {
 	NewPass string `json:"newpass"`
 }
 
-func passwordPut(c *gin.Context) {
+func selfPasswordPut(c *gin.Context) {
 	var f selfPasswordForm
 	errors.Dangerous(c.ShouldBind(&f))
 

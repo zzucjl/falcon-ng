@@ -26,9 +26,9 @@ func Config(r *gin.Engine) {
 
 	self := r.Group("/api/portal/self").Use(middleware.GetCookie())
 	{
-		self.GET("/profile", profileGet)
-		self.PUT("/profile", profilePut)
-		self.PUT("/password", passwordPut)
+		self.GET("/profile", selfProfileGet)
+		self.PUT("/profile", selfProfilePut)
+		self.PUT("/password", selfPasswordPut)
 	}
 
 }
