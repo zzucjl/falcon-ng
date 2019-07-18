@@ -5,9 +5,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type LoginAuth struct {
+	User string `json:"user"`
+	Pass string `json:"pass"`
+}
+
 // Config routes
 func Config(r *gin.Engine) {
-	r.GET("/ping", pong)
+	r.GET("/self/ping", pong)
 
 	r.GET("/incr", func(c *gin.Context) {
 		session := sessions.Default(c)
@@ -22,5 +27,11 @@ func Config(r *gin.Engine) {
 		session.Set("count", count)
 		session.Save()
 		c.JSON(200, gin.H{"count": count})
+	})
+
+	r.POST("/auth/login", func(c *gin.Context) {
+		var la LoginAuth
+		c.Bind(&la)
+		c.JSON(200, la)
 	})
 }

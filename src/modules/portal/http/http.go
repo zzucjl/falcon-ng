@@ -21,11 +21,16 @@ var srv = &http.Server{
 	MaxHeaderBytes: 1 << 20,
 }
 
+var skipPaths = []string{
+	"/auth/login",
+	"/self/ping",
+}
+
 // Start http server
 func Start() {
 	c := config.Get()
 
-	loggerMid := middleware.Logger()
+	loggerMid := middleware.LoggerWithConfig(middleware.LoggerConfig{SkipPaths: skipPaths})
 	recoveryMid := middleware.Recovery()
 	store := cookie.NewStore([]byte(c.HTTP.Secret))
 	sessionMid := sessions.Sessions("falcon-ng", store)

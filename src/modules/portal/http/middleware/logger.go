@@ -1,8 +1,10 @@
 package middleware
 
 import (
+	"bytes"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"time"
@@ -234,6 +236,19 @@ func LoggerWithConfig(conf LoggerConfig) gin.HandlerFunc {
 		path := c.Request.URL.Path
 		raw := c.Request.URL.RawQuery
 
+		var (
+			rdr1 io.ReadCloser
+			rdr2 io.ReadCloser
+		)
+
+		if c.Request.Method != "GET" {
+			buf, _ := ioutil.ReadAll(c.Request.Body)
+			rdr1 = ioutil.NopCloser(bytes.NewBuffer(buf))
+			rdr2 = ioutil.NopCloser(bytes.NewBuffer(buf))
+
+			c.Request.Body = rdr2
+		}
+
 		// Process request
 		c.Next()
 
@@ -264,6 +279,18 @@ func LoggerWithConfig(conf LoggerConfig) gin.HandlerFunc {
 
 			// fmt.Fprint(out, formatter(param))
 			logger.Info(formatter(param))
+
+			if c.Request.Method != "GET" {
+				logger.Info(readBody(rdr1))
+			}
 		}
 	}
+}
+
+func readBody(reader io.Reader) string {
+	buf := new(bytes.Buffer)
+	buf.ReadFrom(reader)
+
+	s := buf.String()
+	return s
 }
