@@ -81,7 +81,7 @@ func LdapLogin(user, pass string) error {
 		lc.BaseDn, // The base dn to search
 		ldap.ScopeWholeSubtree, ldap.NeverDerefAliases, 0, 0, false,
 		fmt.Sprintf(lc.AuthFilter, user), // The filter to apply
-		lc.Attributes,                    // A list attributes to retrieve
+		[]string{},                    // A list attributes to retrieve
 		nil,
 	)
 

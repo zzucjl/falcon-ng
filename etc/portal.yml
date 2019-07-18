@@ -16,13 +16,10 @@ ldap:
   # openldap: (&(uid=%s))
   # AD: (&(sAMAccountName=%s))
   authFilter: "(&(uid=%s))"
-  # openldap: ["uid", "cn", "mail"]
-  # AD: ["sAMAccountName", "displayName", "mail"]
-  attributes: ["uid", "cn", "mail"]
   tls: false
   startTLS: false
 # judge sharding, use judge's identity as cluster list
 judges:
   judge01: 127.0.0.1
 auths:
-  - "kube-1e190ef293ad7389d282750f79a62884"
+  - "srv-kube-1e190ef293ad7389d282750f79a62884"

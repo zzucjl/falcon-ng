@@ -29,15 +29,14 @@ type httpSection struct {
 }
 
 type ldapSection struct {
-	Host       string   `yaml:"host"`
-	Port       int      `yaml:"port"`
-	BaseDn     string   `yaml:"baseDn"`
-	BindUser   string   `yaml:"bindUser"`
-	BindPass   string   `yaml:"bindPass"`
-	AuthFilter string   `yaml:"authFilter"`
-	Attributes []string `yaml:"attributes"`
-	TLS        bool     `yaml:"tls"`
-	StartTLS   bool     `yaml:"startTLS"`
+	Host       string `yaml:"host"`
+	Port       int    `yaml:"port"`
+	BaseDn     string `yaml:"baseDn"`
+	BindUser   string `yaml:"bindUser"`
+	BindPass   string `yaml:"bindPass"`
+	AuthFilter string `yaml:"authFilter"`
+	TLS        bool   `yaml:"tls"`
+	StartTLS   bool   `yaml:"startTLS"`
 }
 
 var (
