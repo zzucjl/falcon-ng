@@ -22,8 +22,8 @@ var srv = &http.Server{
 }
 
 var skipPaths = []string{
-	"/auth/login",
-	"/self/ping",
+	"/api/portal/auth/login",
+	"/api/portal/ping",
 }
 
 // Start http server

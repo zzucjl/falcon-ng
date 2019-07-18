@@ -6,7 +6,7 @@ import (
 
 // Config routes
 func Config(r *gin.Engine) {
-	self := r.Group("/self")
+	self := r.Group("/api/portal")
 	{
 		self.GET("/ping", ping)
 		self.GET("/version", version)
