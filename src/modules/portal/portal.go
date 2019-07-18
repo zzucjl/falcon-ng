@@ -18,8 +18,6 @@ import (
 	"github.com/open-falcon/falcon-ng/src/modules/portal/http"
 )
 
-const version = 1
-
 var (
 	vers *bool
 	help *bool
@@ -33,7 +31,7 @@ func init() {
 	flag.Parse()
 
 	if *vers {
-		fmt.Println("version:", version)
+		fmt.Println("version:", config.Version)
 		os.Exit(0)
 	}
 

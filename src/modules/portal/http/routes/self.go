@@ -1,9 +1,20 @@
 package routes
 
-import "github.com/gin-gonic/gin"
+import (
+	"os"
 
-func pong(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"message": "pong3",
-	})
+	"github.com/gin-gonic/gin"
+	"github.com/open-falcon/falcon-ng/src/modules/portal/config"
+)
+
+func ping(c *gin.Context) {
+	c.String(200, "pong")
+}
+
+func version(c *gin.Context) {
+	c.String(200, "%d", config.Version)
+}
+
+func pid(c *gin.Context) {
+	c.String(200, "%d", os.Getpid())
 }
