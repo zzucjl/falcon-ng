@@ -10,6 +10,14 @@ func renderMessage(c *gin.Context, msg string) {
 	c.JSON(200, gin.H{"err": msg})
 }
 
+func renderError(c *gin.Context, err error) {
+	if err != nil {
+		renderMessage(c, err.Error())
+	}
+
+	renderMessage(c, "")
+}
+
 func renderData(c *gin.Context, data interface{}, err error) {
 	if err == nil {
 		c.JSON(200, gin.H{"dat": data, "err": ""})

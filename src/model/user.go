@@ -4,8 +4,11 @@ import (
 	"crypto/tls"
 	"fmt"
 	"log"
+	"strings"
 
+	"github.com/toolkits/pkg/errors"
 	"github.com/toolkits/pkg/logger"
+	"github.com/toolkits/pkg/str"
 	"gopkg.in/ldap.v3"
 
 	"github.com/open-falcon/falcon-ng/src/modules/portal/config"
@@ -19,6 +22,43 @@ type User struct {
 	Phone    string `json:"phone"`
 	Email    string `json:"email"`
 	Im       string `json:"im"`
+}
+
+func (u *User) CheckFields() {
+	u.Username = strings.TrimSpace(u.Username)
+	if u.Username == "" {
+		errors.Bomb("username is blank")
+	}
+
+	if str.Dangerous(u.Username) {
+		errors.Bomb("username is dangerous")
+	}
+
+	if str.Dangerous(u.Dispname) {
+		errors.Bomb("dispname is dangerous")
+	}
+
+	if u.Phone != "" && !str.IsPhone(u.Phone) {
+		errors.Bomb("%s format error", u.Phone)
+	}
+
+	if u.Email != "" && !str.IsMail(u.Email) {
+		errors.Bomb("%s format error", u.Email)
+	}
+
+	if len(u.Username) > 32 {
+		errors.Bomb("username too long")
+	}
+
+	if len(u.Dispname) > 32 {
+		errors.Bomb("dispname too long")
+	}
+}
+
+func (u *User) Update(cols ...string) error {
+	u.CheckFields()
+	_, err := DB["uic"].Where("id=?", u.Id).Cols(cols...).Update(u)
+	return err
 }
 
 func InitRoot() {
@@ -81,7 +121,7 @@ func LdapLogin(user, pass string) error {
 		lc.BaseDn, // The base dn to search
 		ldap.ScopeWholeSubtree, ldap.NeverDerefAliases, 0, 0, false,
 		fmt.Sprintf(lc.AuthFilter, user), // The filter to apply
-		[]string{},                    // A list attributes to retrieve
+		[]string{},                       // A list attributes to retrieve
 		nil,
 	)
 
