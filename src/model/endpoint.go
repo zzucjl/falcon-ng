@@ -1,7 +1,6 @@
 package model
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/go-xorm/xorm"
@@ -20,7 +19,6 @@ func EndpointTotal(query, batch, field string) (int64, error) {
 }
 
 func EndpointGets(query, batch, field string, limit, offset int) ([]Endpoint, error) {
-	fmt.Println("offset:", offset)
 	session := buildEndpointWhere(query, batch, field).OrderBy(field).Limit(limit, offset)
 	var objs []Endpoint
 	err := session.Find(&objs)
