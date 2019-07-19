@@ -5,7 +5,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/toolkits/pkg/errors"
-	"github.com/toolkits/pkg/pager"
 
 	"github.com/open-falcon/falcon-ng/src/model"
 )
@@ -72,7 +71,12 @@ func queryInt64(c *gin.Context, key string, defaultVal int64) int64 {
 }
 
 func offset(c *gin.Context, limit int, total interface{}) int {
-	return pager.NewPaginator(c.Request, limit, total).Offset()
+	if limit <= 0 {
+		limit = 10
+	}
+
+	page := queryInt(c, "p", 1)
+	return (page - 1) * limit
 }
 
 func renderMessage(c *gin.Context, v interface{}) {

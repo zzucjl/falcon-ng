@@ -49,4 +49,10 @@ func Config(r *gin.Engine) {
 		team.DELETE("/:id", teamDel)
 	}
 
+	endpoint := r.Group("/api/portal/endpoint").Use(middleware.GetCookieUser())
+	{
+		endpoint.GET("", endpointGets)
+		endpoint.POST("", endpointImport)
+	}
+
 }

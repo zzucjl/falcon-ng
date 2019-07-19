@@ -21,10 +21,10 @@ func teamListGet(c *gin.Context) {
 		errors.Dangerous(list[i].FillObjs())
 	}
 
-	c.JSON(200, gin.H{
+	renderData(c, gin.H{
 		"list":  list,
 		"total": total,
-	})
+	}, nil)
 }
 
 type teamForm struct {

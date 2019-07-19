@@ -21,7 +21,7 @@ CREATE TABLE `endpoint` (
   `ident` varchar(255) not null,
   `alias` varchar(255) not null default '',
   PRIMARY KEY (`id`),
-  KEY (`ident`),
+  UNIQUE KEY (`ident`),
   KEY (`alias`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

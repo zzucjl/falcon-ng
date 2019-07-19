@@ -21,10 +21,10 @@ func userListGet(c *gin.Context) {
 	list, err := model.UserGets(query, limit, offset(c, limit, total))
 	errors.Dangerous(err)
 
-	c.JSON(200, gin.H{
+	renderData(c, gin.H{
 		"list":  list,
 		"total": total,
-	})
+	}, nil)
 }
 
 type userAddForm struct {
