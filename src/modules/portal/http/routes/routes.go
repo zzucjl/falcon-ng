@@ -53,6 +53,8 @@ func Config(r *gin.Engine) {
 	{
 		endpoint.GET("", endpointGets)
 		endpoint.POST("", endpointImport)
+		endpoint.PUT("/:id", endpointPut)
+		endpoint.DELETE("", endpointDel)
 	}
 
 }

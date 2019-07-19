@@ -13,6 +13,25 @@ type Endpoint struct {
 	Alias string `json:"alias"`
 }
 
+func EndpointGet(col string, val interface{}) (*Endpoint, error) {
+	var obj Endpoint
+	has, err := DB["portal"].Where(col+"=?", val).Get(&obj)
+	if err != nil {
+		return nil, err
+	}
+
+	if !has {
+		return nil, nil
+	}
+
+	return &obj, nil
+}
+
+func (e *Endpoint) Update(cols ...string) error {
+	_, err := DB["portal"].Where("id=?", e.Id).Cols(cols...).Update(e)
+	return err
+}
+
 func EndpointTotal(query, batch, field string) (int64, error) {
 	session := buildEndpointWhere(query, batch, field)
 	return session.Count(new(Endpoint))
@@ -89,4 +108,28 @@ func endpointImport(session *xorm.Session, ident, alias string) error {
 	}
 
 	return err
+}
+
+func EndpointDel(ids []int64) error {
+	if len(ids) == 0 {
+		return nil
+	}
+
+	bindings, err := NodeEndpointGetByEndpointIds(ids)
+	if err != nil {
+		return err
+	}
+
+	for i := 0; i < len(bindings); i++ {
+		err = NodeEndpointUnbind(bindings[i].NodeId, bindings[i].EndpointId)
+		if err != nil {
+			return err
+		}
+	}
+
+	if _, err := DB["portal"].In("id", ids).Delete(new(Endpoint)); err != nil {
+		return err
+	}
+
+	return nil
 }

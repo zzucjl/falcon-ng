@@ -3,6 +3,7 @@ package routes
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/toolkits/pkg/errors"
+	"github.com/toolkits/pkg/str"
 
 	"github.com/open-falcon/falcon-ng/src/model"
 )
@@ -37,4 +38,29 @@ func endpointImport(c *gin.Context) {
 	var f endpointImportForm
 	errors.Dangerous(c.ShouldBind(&f))
 	renderMessage(c, model.EndpointImport(f.Endpoints))
+}
+
+type endpointForm struct {
+	Alias string `json:"alias"`
+}
+
+func endpointPut(c *gin.Context) {
+	var f endpointForm
+	errors.Dangerous(c.ShouldBind(&f))
+
+	id := urlParamInt64(c, "id")
+	endpoint, err := model.EndpointGet("id", id)
+	errors.Dangerous(err)
+
+	if endpoint == nil {
+		errors.Bomb("no such endpoint, id: %d", id)
+	}
+
+	endpoint.Alias = f.Alias
+	renderMessage(c, endpoint.Update("alias"))
+}
+
+func endpointDel(c *gin.Context) {
+	ids := str.IdsInt64(queryStr(c, "ids", ""))
+	renderMessage(c, model.EndpointDel(ids))
 }

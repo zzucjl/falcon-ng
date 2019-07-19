@@ -28,5 +28,6 @@ CREATE TABLE `endpoint` (
 CREATE TABLE `node_endpoint` (
   `node_id` int unsigned not null,
   `endpoint_id` int unsigned not null,
-  KEY(`node_id`)
+  KEY(`node_id`),
+  KEY(`endpoint_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
