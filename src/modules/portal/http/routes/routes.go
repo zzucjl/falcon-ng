@@ -55,8 +55,12 @@ func Config(r *gin.Engine) {
 		endpoint.POST("", endpointImport)
 		endpoint.PUT("/:id", endpointPut)
 		endpoint.DELETE("", endpointDel)
-		endpoint.GET("/bindings", endpointBindingsGet)
-		endpoint.GET("/bynodeids", endpointByNodeIdsGets)
+	}
+
+	endpoints := r.Group("/api/portal/endpoints").Use(middleware.GetCookieUser())
+	{
+		endpoints.GET("/bindings", endpointBindingsGet)
+		endpoints.GET("/bynodeids", endpointByNodeIdsGets)
 	}
 
 	tree := r.Group("/api/portal/tree").Use(middleware.GetCookieUser())
@@ -68,18 +72,22 @@ func Config(r *gin.Engine) {
 	node := r.Group("/api/portal/node").Use(middleware.GetCookieUser())
 	{
 		node.POST("", nodePost)
-		node.GET("/search", nodeSearchGet)
-		node.PUT("/one/:id/name", nodeNamePut)
-		node.DELETE("/one/:id", nodeDel)
-		node.GET("/leafids", nodeLeafIdsGet)
-		node.GET("/pids", nodePidsGet)
-		node.GET("/byids", nodesByIdsGets)
-		node.GET("/one/:id/endpoint", endpointsUnder)
-		node.POST("/one/:id/endpoint-bind", endpointBind)
-		node.POST("/one/:id/endpoint-unbind", endpointUnbind)
-		node.GET("/one/:id/maskconf", maskconfGets)
-		node.GET("/one/:id/screen", screenGets)
-		node.POST("/one/:id/screen", screenPost)
+		node.PUT("/:id/name", nodeNamePut)
+		node.DELETE("/:id", nodeDel)
+		node.GET("/:id/endpoint", endpointsUnder)
+		node.POST("/:id/endpoint-bind", endpointBind)
+		node.POST("/:id/endpoint-unbind", endpointUnbind)
+		node.GET("/:id/maskconf", maskconfGets)
+		node.GET("/:id/screen", screenGets)
+		node.POST("/:id/screen", screenPost)
+	}
+
+	nodes := r.Group("/api/portal/nodes").Use(middleware.GetCookieUser())
+	{
+		nodes.GET("/search", nodeSearchGet)
+		nodes.GET("/leafids", nodeLeafIdsGet)
+		nodes.GET("/pids", nodePidsGet)
+		nodes.GET("/byids", nodesByIdsGets)
 	}
 
 	maskconf := r.Group("/api/portal/maskconf").Use(middleware.GetCookieUser())
@@ -100,17 +108,25 @@ func Config(r *gin.Engine) {
 	subclass := r.Group("/api/portal/subclass").Use(middleware.GetCookieUser())
 	{
 		subclass.PUT("", screenSubclassPut)
-		subclass.PUT("/loc", screenSubclassLocPut)
 		subclass.DELETE("/:id", screenSubclassDel)
 		subclass.GET("/:id/chart", chartGets)
 		subclass.POST("/:id/chart", chartPost)
 	}
 
+	subclasses := r.Group("/api/portal/subclasses").Use(middleware.GetCookieUser())
+	{
+		subclasses.PUT("/loc", screenSubclassLocPut)
+	}
+
 	chart := r.Group("/api/portal/chart").Use(middleware.GetCookieUser())
 	{
-		chart.PUT("/one/:id", chartPut)
-		chart.DELETE("/one/:id", chartDel)
-		chart.PUT("/weights", chartWeightsPut)
+		chart.PUT("/:id", chartPut)
+		chart.DELETE("/:id", chartDel)
+	}
+
+	charts := r.Group("/api/portal/charts").Use(middleware.GetCookieUser())
+	{
+		charts.PUT("/weights", chartWeightsPut)
 	}
 
 	tmpchart := r.Group("/api/portal/tmpchart").Use(middleware.GetCookieUser())
@@ -146,7 +162,11 @@ func Config(r *gin.Engine) {
 		stra.PUT("", straPut)
 		stra.DELETE("", strasDel)
 		stra.GET("", strasGet)
-		stra.GET("/effective", effectiveStrasGet)
-		stra.GET("/one/:sid", straGet)
+		stra.GET("/:sid", straGet)
+	}
+
+	stras := r.Group("/api/portal/stras").Use(middleware.GetCookieUser())
+	{
+		stras.GET("/effective", effectiveStrasGet)
 	}
 }
