@@ -69,17 +69,17 @@ func Config(r *gin.Engine) {
 	{
 		node.POST("", nodePost)
 		node.GET("/search", nodeSearchGet)
-		node.PUT("/:id/name", nodeNamePut)
-		node.DELETE("/:id", nodeDel)
+		node.PUT("/one/:id/name", nodeNamePut)
+		node.DELETE("/one/:id", nodeDel)
 		node.GET("/leafids", nodeLeafIdsGet)
 		node.GET("/pids", nodePidsGet)
 		node.GET("/byids", nodesByIdsGets)
-		node.GET("/:id/endpoint", endpointsUnder)
-		node.POST("/:id/endpoint-bind", endpointBind)
-		node.POST("/:id/endpoint-unbind", endpointUnbind)
-		node.GET("/:id/maskconf", maskconfGets)
-		node.GET("/:id/screen", screenGets)
-		node.POST("/:id/screen", screenPost)
+		node.GET("/one/:id/endpoint", endpointsUnder)
+		node.POST("/one/:id/endpoint-bind", endpointBind)
+		node.POST("/one/:id/endpoint-unbind", endpointUnbind)
+		node.GET("/one/:id/maskconf", maskconfGets)
+		node.GET("/one/:id/screen", screenGets)
+		node.POST("/one/:id/screen", screenPost)
 	}
 
 	maskconf := r.Group("/api/portal/maskconf").Use(middleware.GetCookieUser())
@@ -108,8 +108,8 @@ func Config(r *gin.Engine) {
 
 	chart := r.Group("/api/portal/chart").Use(middleware.GetCookieUser())
 	{
-		chart.PUT("/:id", chartPut)
-		chart.DELETE("/:id", chartDel)
+		chart.PUT("/one/:id", chartPut)
+		chart.DELETE("/one/:id", chartDel)
 		chart.PUT("/weights", chartWeightsPut)
 	}
 
@@ -138,5 +138,15 @@ func Config(r *gin.Engine) {
 		collect.DELETE("", collectsDel)
 		collect.GET("/byendpoint/:endpoint", collectGetByEndpoint)
 		collect.POST("/check", regExpCheck)
+	}
+
+	stra := r.Group("/api/portal/stra").Use(middleware.GetCookieUser())
+	{
+		stra.POST("", straPost)
+		stra.PUT("", straPut)
+		stra.DELETE("", strasDel)
+		stra.GET("", strasGet)
+		stra.GET("/effective", effectiveStrasGet)
+		stra.GET("/one/:sid", straGet)
 	}
 }
