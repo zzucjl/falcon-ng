@@ -77,6 +77,14 @@ func Config(r *gin.Engine) {
 		node.GET("/:id/endpoint", endpointsUnder)
 		node.POST("/:id/endpoint-bind", endpointBind)
 		node.POST("/:id/endpoint-unbind", endpointUnbind)
+		node.GET("/:id/maskconf", maskconfGets)
+	}
+
+	maskconf := r.Group("/api/portal/maskconf").Use(middleware.GetCookieUser())
+	{
+		maskconf.POST("", maskconfPost)
+		maskconf.PUT("/:id", maskconfPut)
+		maskconf.DELETE("/:id", maskconfDel)
 	}
 
 }

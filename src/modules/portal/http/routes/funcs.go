@@ -150,3 +150,16 @@ func mustUser(id int64) *model.User {
 
 	return user
 }
+
+func mustNode(id int64) *model.Node {
+	node, err := model.NodeGet("id", id)
+	if err != nil {
+		errors.Bomb("cannot retrieve node[%d]: %v", id, err)
+	}
+
+	if node == nil {
+		errors.Bomb("no such node[%d]", id)
+	}
+
+	return node
+}
