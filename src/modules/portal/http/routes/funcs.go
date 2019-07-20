@@ -51,6 +51,28 @@ func mustQueryStr(c *gin.Context, key string) string {
 	return val
 }
 
+func mustQueryInt(c *gin.Context, key string) int {
+	strv := mustQueryStr(c, key)
+
+	intv, err := strconv.Atoi(strv)
+	if err != nil {
+		errors.Bomb("cannot convert [%s] to int", strv)
+	}
+
+	return intv
+}
+
+func mustQueryInt64(c *gin.Context, key string) int64 {
+	strv := mustQueryStr(c, key)
+
+	intv, err := strconv.ParseInt(strv, 10, 64)
+	if err != nil {
+		errors.Bomb("cannot convert [%s] to int64", strv)
+	}
+
+	return intv
+}
+
 func queryInt(c *gin.Context, key string, defaultVal int) int {
 	strv := c.Query(key)
 	if strv == "" {
@@ -201,4 +223,30 @@ func mustChart(id int64) *model.Chart {
 	}
 
 	return chart
+}
+
+func mustEventCur(id int64) *model.EventCur {
+	eventCur, err := model.EventCurGet("id", id)
+	if err != nil {
+		errors.Bomb("cannot retrieve eventCur[%d]: %v", id, err)
+	}
+
+	if eventCur == nil {
+		errors.Bomb("no such eventCur[%d]", id)
+	}
+
+	return eventCur
+}
+
+func mustEvent(id int64) *model.Event {
+	eventCur, err := model.EventGet("id", id)
+	if err != nil {
+		errors.Bomb("cannot retrieve event[%d]: %v", id, err)
+	}
+
+	if eventCur == nil {
+		errors.Bomb("no such event[%d]", id)
+	}
+
+	return eventCur
 }

@@ -118,4 +118,14 @@ func Config(r *gin.Engine) {
 		tmpchart.GET("", tmpChartGet)
 		tmpchart.POST("", tmpChartPost)
 	}
+
+	event := r.Group("/api/portal/event").Use(middleware.GetCookieUser())
+	{
+		event.GET("/cur", eventCurGets)
+		event.GET("/cur/:id", eventCurGetById)
+		event.DELETE("/cur/:id", eventCurDel)
+		event.GET("/his", eventHisGets)
+		event.GET("/his/:id", eventHisGetById)
+		event.POST("/cur/claim", eventCurClaim)
+	}
 }

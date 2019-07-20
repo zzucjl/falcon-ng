@@ -6,6 +6,7 @@ import (
 	"log"
 	"strings"
 
+	jsoniter "github.com/json-iterator/go"
 	"github.com/toolkits/pkg/errors"
 	"github.com/toolkits/pkg/logger"
 	"github.com/toolkits/pkg/str"
@@ -271,4 +272,17 @@ func UserGets(query string, limit, offset int) ([]User, error) {
 	var users []User
 	err := session.Find(&users)
 	return users, err
+}
+
+func UserNameGetByIds(ids string) ([]string, error) {
+	var json = jsoniter.ConfigCompatibleWithStandardLibrary
+
+	var userIds []int64
+	if err := json.Unmarshal([]byte(ids), &userIds); err != nil {
+		return nil, err
+	}
+
+	var names []string
+	err := DB["uic"].Table("user").In("id", userIds).Select("username").Find(&names)
+	return names, err
 }
