@@ -57,4 +57,20 @@ func Config(r *gin.Engine) {
 		endpoint.DELETE("", endpointDel)
 	}
 
+	tree := r.Group("/api/portal/tree").Use(middleware.GetCookieUser())
+	{
+		tree.GET("", treeGet)
+		tree.GET("/search", treeSearchGet)
+	}
+
+	node := r.Group("/api/portal/node").Use(middleware.GetCookieUser())
+	{
+		node.POST("", nodePost)
+		node.GET("/search", nodeSearchGet)
+		node.PUT("/:id/name", nodeNamePut)
+		node.DELETE("/:id", nodeDel)
+		node.GET("/leafids", nodeLeafIdsGet)
+		node.GET("/pids", nodePidsGet)
+	}
+
 }
