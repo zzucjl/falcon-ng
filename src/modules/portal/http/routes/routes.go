@@ -128,4 +128,15 @@ func Config(r *gin.Engine) {
 		event.GET("/his/:id", eventHisGetById)
 		event.POST("/cur/claim", eventCurClaim)
 	}
+
+	collect := r.Group("/api/portal/collect").Use(middleware.GetCookieUser())
+	{
+		collect.POST("", collectPost)
+		collect.GET("/list", collectsGet)
+		collect.GET("", collectGet)
+		collect.PUT("", collectPut)
+		collect.DELETE("", collectsDel)
+		collect.GET("/byendpoint/:endpoint", collectGetByEndpoint)
+		collect.POST("/check", regExpCheck)
+	}
 }

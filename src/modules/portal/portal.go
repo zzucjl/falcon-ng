@@ -16,6 +16,7 @@ import (
 	"github.com/open-falcon/falcon-ng/src/model"
 	"github.com/open-falcon/falcon-ng/src/modules/portal/config"
 	"github.com/open-falcon/falcon-ng/src/modules/portal/http"
+	"github.com/open-falcon/falcon-ng/src/modules/portal/scache"
 )
 
 var (
@@ -54,6 +55,7 @@ func main() {
 	model.InitMySQL("uic", "portal", "mon")
 	model.InitRoot()
 	model.InitNode()
+	scache.Init()
 
 	http.Start()
 	ending()

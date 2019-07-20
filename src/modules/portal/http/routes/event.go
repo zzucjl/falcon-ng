@@ -13,8 +13,6 @@ import (
 	"github.com/open-falcon/falcon-ng/src/model"
 )
 
-var json = jsoniter.ConfigCompatibleWithStandardLibrary
-
 type eventData struct {
 	Id           int64               `json:"id"`
 	Sid          int64               `json:"sid"`
@@ -48,6 +46,8 @@ type AlertUpgrade struct {
 }
 
 func eventCurGets(c *gin.Context) {
+	var json = jsoniter.ConfigCompatibleWithStandardLibrary
+
 	stime := mustQueryInt64(c, "stime")
 	etime := mustQueryInt64(c, "etime")
 	nodePath := mustQueryStr(c, "nodepath")
@@ -133,6 +133,8 @@ func eventCurGets(c *gin.Context) {
 }
 
 func eventHisGets(c *gin.Context) {
+	var json = jsoniter.ConfigCompatibleWithStandardLibrary
+
 	stime := mustQueryInt64(c, "stime")
 	etime := mustQueryInt64(c, "etime")
 	nodePath := mustQueryStr(c, "nodepath")
@@ -220,6 +222,8 @@ func eventCurDel(c *gin.Context) {
 }
 
 func eventHisGetById(c *gin.Context) {
+	var json = jsoniter.ConfigCompatibleWithStandardLibrary
+
 	event := mustEvent(urlParamInt64(c, "id"))
 
 	users, err := model.UserNameGetByIds(event.Users)
@@ -279,6 +283,8 @@ func eventHisGetById(c *gin.Context) {
 }
 
 func eventCurGetById(c *gin.Context) {
+	var json = jsoniter.ConfigCompatibleWithStandardLibrary
+
 	eventCur := mustEventCur(urlParamInt64(c, "id"))
 
 	users, err := model.UserNameGetByIds(eventCur.Users)
@@ -367,8 +373,5 @@ func eventCurClaim(c *gin.Context) {
 		return
 	}
 
-	if nodePath != "" {
-		renderMessage(c, model.UpdateClaimantsByNodePath(me.Id, nodePath))
-	}
-
+	renderMessage(c, model.UpdateClaimantsByNodePath(me.Id, nodePath))
 }
