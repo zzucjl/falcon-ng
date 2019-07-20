@@ -55,6 +55,8 @@ func Config(r *gin.Engine) {
 		endpoint.POST("", endpointImport)
 		endpoint.PUT("/:id", endpointPut)
 		endpoint.DELETE("", endpointDel)
+		endpoint.GET("/bindings", endpointBindingsGet)
+		endpoint.GET("/bynodeids", endpointByNodeIdsGets)
 	}
 
 	tree := r.Group("/api/portal/tree").Use(middleware.GetCookieUser())

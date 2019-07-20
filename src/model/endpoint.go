@@ -184,3 +184,70 @@ func EndpointIdsByIdents(idents []string) ([]int64, error) {
 
 	return ret, nil
 }
+
+type EndpointBinding struct {
+	Ident string `json:"ident"`
+	Alias string `json:"alias"`
+	Nodes []Node `json:"nodes"`
+}
+
+func EndpointBindings(endpointIds []int64) ([]EndpointBinding, error) {
+	var nes []NodeEndpoint
+	err := DB["portal"].In("endpoint_id", endpointIds).Find(&nes)
+	if err != nil {
+		return []EndpointBinding{}, err
+	}
+
+	cnt := len(nes)
+	if cnt == 0 {
+		return []EndpointBinding{}, nil
+	}
+
+	h2n := make(map[int64][]int64)
+	arr := make([]int64, 0, cnt)
+	for i := 0; i < cnt; i++ {
+		arr = append(arr, nes[i].EndpointId)
+		h2n[nes[i].EndpointId] = append(h2n[nes[i].EndpointId], nes[i].NodeId)
+	}
+
+	var endpoints []Endpoint
+	err = DB["portal"].In("id", arr).Find(&endpoints)
+	if err != nil {
+		return []EndpointBinding{}, err
+	}
+
+	cnt = len(endpoints)
+	ret := make([]EndpointBinding, 0, cnt)
+	for i := 0; i < cnt; i++ {
+		nodeids := h2n[endpoints[i].Id]
+		if nodeids == nil || len(nodeids) == 0 {
+			continue
+		}
+
+		var nodes []Node
+		err = DB["portal"].In("id", nodeids).Find(&nodes)
+		if err != nil {
+			return []EndpointBinding{}, err
+		}
+
+		b := EndpointBinding{
+			Ident: endpoints[i].Ident,
+			Alias: endpoints[i].Alias,
+			Nodes: nodes,
+		}
+
+		ret = append(ret, b)
+	}
+
+	return ret, nil
+}
+
+func EndpointUnderLeafs(leafIds []int64) ([]Endpoint, error) {
+	var endpoints []Endpoint
+	if len(leafIds) == 0 {
+		return []Endpoint{}, nil
+	}
+
+	err := DB["portal"].Where("id in (select endpoint_id from node_endpoint where node_id in (" + str.IdsString(leafIds) + "))").Find(&endpoints)
+	return endpoints, err
+}
