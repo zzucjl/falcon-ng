@@ -71,6 +71,7 @@ func Config(r *gin.Engine) {
 		node.DELETE("/:id", nodeDel)
 		node.GET("/leafids", nodeLeafIdsGet)
 		node.GET("/pids", nodePidsGet)
+		node.GET("/byids", nodesByIdsGets)
 	}
 
 }

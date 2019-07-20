@@ -111,11 +111,7 @@ func nodeDel(c *gin.Context) {
 }
 
 func nodeLeafIdsGet(c *gin.Context) {
-	idsStr := queryStr(c, "ids", "")
-	if idsStr == "" {
-		errors.Dangerous("ids is blank")
-	}
-
+	idsStr := mustQueryStr(c, "ids")
 	ids := str.IdsInt64(idsStr)
 
 	nodes, err := model.NodesGetByIds(ids)
@@ -133,11 +129,7 @@ func nodeLeafIdsGet(c *gin.Context) {
 }
 
 func nodePidsGet(c *gin.Context) {
-	idsStr := queryStr(c, "ids", "")
-	if idsStr == "" {
-		errors.Dangerous("ids is blank")
-	}
-
+	idsStr := mustQueryStr(c, "ids")
 	ids := str.IdsInt64(idsStr)
 
 	nodes, err := model.NodesGetByIds(ids)
@@ -152,4 +144,11 @@ func nodePidsGet(c *gin.Context) {
 	}
 
 	renderData(c, dat, err)
+}
+
+func nodesByIdsGets(c *gin.Context) {
+	idsStr := mustQueryStr(c, "ids")
+	ids := str.IdsInt64(idsStr)
+	nodes, err := model.NodeByIds(ids)
+	renderData(c, nodes, err)
 }

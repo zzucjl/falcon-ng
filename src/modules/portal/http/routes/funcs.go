@@ -42,6 +42,15 @@ func queryStr(c *gin.Context, key string, defaultVal string) string {
 	return val
 }
 
+func mustQueryStr(c *gin.Context, key string) string {
+	val := c.Query(key)
+	if val == "" {
+		errors.Bomb("arg[%s] not found", key)
+	}
+
+	return val
+}
+
 func queryInt(c *gin.Context, key string, defaultVal int) int {
 	strv := c.Query(key)
 	if strv == "" {
