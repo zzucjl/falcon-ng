@@ -78,6 +78,8 @@ func Config(r *gin.Engine) {
 		node.POST("/:id/endpoint-bind", endpointBind)
 		node.POST("/:id/endpoint-unbind", endpointUnbind)
 		node.GET("/:id/maskconf", maskconfGets)
+		node.GET("/:id/screen", screenGets)
+		node.POST("/:id/screen", screenPost)
 	}
 
 	maskconf := r.Group("/api/portal/maskconf").Use(middleware.GetCookieUser())
@@ -87,4 +89,27 @@ func Config(r *gin.Engine) {
 		maskconf.DELETE("/:id", maskconfDel)
 	}
 
+	screen := r.Group("/api/portal/screen").Use(middleware.GetCookieUser())
+	{
+		screen.PUT("/:id", screenPut)
+		screen.DELETE("/:id", screenDel)
+		screen.GET("/:id/subclass", screenSubclassGets)
+		screen.POST("/:id/subclass", screenSubclassPost)
+	}
+
+	subclass := r.Group("/api/portal/subclass").Use(middleware.GetCookieUser())
+	{
+		subclass.PUT("", screenSubclassPut)
+		subclass.PUT("/loc", screenSubclassLocPut)
+		subclass.DELETE("/:id", screenSubclassDel)
+		subclass.GET("/:id/chart", chartGets)
+		subclass.POST("/:id/chart", chartPost)
+	}
+
+	chart := r.Group("/api/portal/chart").Use(middleware.GetCookieUser())
+	{
+		chart.PUT("/:id", chartPut)
+		chart.DELETE("/:id", chartDel)
+		chart.PUT("/weights", chartWeightsPut)
+	}
 }

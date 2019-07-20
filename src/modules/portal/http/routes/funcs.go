@@ -163,3 +163,42 @@ func mustNode(id int64) *model.Node {
 
 	return node
 }
+
+func mustScreen(id int64) *model.Screen {
+	screen, err := model.ScreenGet("id", id)
+	if err != nil {
+		errors.Bomb("cannot retrieve screen[%d]: %v", id, err)
+	}
+
+	if screen == nil {
+		errors.Bomb("no such screen[%d]", id)
+	}
+
+	return screen
+}
+
+func mustScreenSubclass(id int64) *model.ScreenSubclass {
+	subclass, err := model.ScreenSubclassGet("id", id)
+	if err != nil {
+		errors.Bomb("cannot retrieve subclass[%d]: %v", id, err)
+	}
+
+	if subclass == nil {
+		errors.Bomb("no such subclass[%d]", id)
+	}
+
+	return subclass
+}
+
+func mustChart(id int64) *model.Chart {
+	chart, err := model.ChartGet("id", id)
+	if err != nil {
+		errors.Bomb("cannot retrieve chart[%d]: %v", id, err)
+	}
+
+	if chart == nil {
+		errors.Bomb("no such chart[%d]", id)
+	}
+
+	return chart
+}
