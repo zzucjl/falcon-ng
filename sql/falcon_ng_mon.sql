@@ -56,7 +56,8 @@ create table `chart` (
 create table `tmp_chart` (
   `id` int unsigned not null auto_increment,
   `configs` varchar(8192),
-  `creator` varchar(64) NOT NULL COMMENT '创建者',
+  `creator` varchar(64) not null,
+  `last_updated` timestamp not null default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   primary key (`id`)
 ) engine=innodb default charset=utf8;
 

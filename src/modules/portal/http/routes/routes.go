@@ -112,4 +112,10 @@ func Config(r *gin.Engine) {
 		chart.DELETE("/:id", chartDel)
 		chart.PUT("/weights", chartWeightsPut)
 	}
+
+	tmpchart := r.Group("/api/portal/tmpchart").Use(middleware.GetCookieUser())
+	{
+		tmpchart.GET("", tmpChartGet)
+		tmpchart.POST("", tmpChartPost)
+	}
 }
