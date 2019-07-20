@@ -152,3 +152,103 @@ func nodesByIdsGets(c *gin.Context) {
 	nodes, err := model.NodeByIds(ids)
 	renderData(c, nodes, err)
 }
+
+func endpointsUnder(c *gin.Context) {
+	nodeid := urlParamInt64(c, "id")
+	limit := queryInt(c, "limit", 20)
+	query := queryStr(c, "query", "")
+	batch := queryStr(c, "batch", "")
+	field := queryStr(c, "field", "ident")
+
+	if !(field == "ident" || field == "alias") {
+		errors.Bomb("field invalid")
+	}
+
+	node, err := model.NodeGet("id", nodeid)
+	errors.Dangerous(err)
+
+	if node == nil {
+		errors.Bomb("no such node")
+	}
+
+	leafIds, err := node.LeafIds()
+	errors.Dangerous(err)
+
+	if len(leafIds) == 0 {
+		renderData(c, gin.H{
+			"list":  []model.Endpoint{},
+			"total": 0,
+		}, nil)
+		return
+	}
+
+	total, err := model.EndpointUnderNodeTotal(leafIds, query, batch, field)
+	errors.Dangerous(err)
+
+	list, err := model.EndpointUnderNodeGets(leafIds, query, batch, field, limit, offset(c, limit, total))
+	errors.Dangerous(err)
+
+	renderData(c, gin.H{
+		"list":  list,
+		"total": total,
+	}, nil)
+}
+
+type endpointBindForm struct {
+	Idents []string `json:"idents"`
+	DelOld int      `json:"del_old"`
+}
+
+func endpointBind(c *gin.Context) {
+	node, err := model.NodeGet("id", urlParamInt64(c, "id"))
+	errors.Dangerous(err)
+
+	if node == nil {
+		errors.Bomb("no such node")
+	}
+
+	if node.Leaf != 1 {
+		errors.Bomb("node[%s] not leaf", node.Path)
+	}
+
+	if node.Type > 0 {
+		errors.Bomb("由其他子系统管理的节点，不允许在服务树视图挂载机器")
+	}
+
+	var f endpointBindForm
+	errors.Dangerous(c.ShouldBind(&f))
+
+	ids, err := model.EndpointIdsByIdents(f.Idents)
+	errors.Dangerous(err)
+
+	renderMessage(c, node.Bind(ids, f.DelOld))
+}
+
+type endpointUnbindForm struct {
+	Idents []string `json:"idents"`
+}
+
+func endpointUnbind(c *gin.Context) {
+	node, err := model.NodeGet("id", urlParamInt64(c, "id"))
+	errors.Dangerous(err)
+
+	if node == nil {
+		errors.Bomb("no such node")
+	}
+
+	if node.Leaf != 1 {
+		errors.Bomb("node[%s] not leaf", node.Path)
+	}
+
+	if node.Type > 0 {
+		errors.Bomb("由其他子系统管理的节点，不允许在服务树视图解绑机器")
+	}
+
+	var f endpointUnbindForm
+	errors.Dangerous(c.ShouldBind(&f))
+
+	ids, err := model.EndpointIdsByIdents(f.Idents)
+	errors.Dangerous(err)
+
+	renderMessage(c, node.Unbind(ids))
+}

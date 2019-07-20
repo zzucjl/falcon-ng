@@ -72,6 +72,9 @@ func Config(r *gin.Engine) {
 		node.GET("/leafids", nodeLeafIdsGet)
 		node.GET("/pids", nodePidsGet)
 		node.GET("/byids", nodesByIdsGets)
+		node.GET("/:id/endpoint", endpointsUnder)
+		node.POST("/:id/endpoint-bind", endpointBind)
+		node.POST("/:id/endpoint-unbind", endpointUnbind)
 	}
 
 }

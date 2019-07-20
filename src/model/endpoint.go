@@ -133,3 +133,54 @@ func EndpointDel(ids []int64) error {
 
 	return nil
 }
+
+func buildEndpointUnderNodeWhere(leafids []int64, query, batch, field string) *xorm.Session {
+	session := DB["portal"].Where("id in (select endpoint_id from node_endpoint where node_id in (" + str.IdsString(leafids) + "))")
+
+	if batch == "" && query != "" {
+		q := "%" + query + "%"
+		session = session.Where("ident like ? or alias like", q, q)
+	}
+
+	if batch != "" {
+		endpoints := str.ParseCommaTrim(batch)
+		if len(endpoints) > 0 {
+			session = session.In(field, endpoints)
+		}
+	}
+
+	return session
+}
+
+func EndpointUnderNodeTotal(leafids []int64, query, batch, field string) (int64, error) {
+	session := buildEndpointUnderNodeWhere(leafids, query, batch, field)
+	return session.Count(new(Endpoint))
+}
+
+func EndpointUnderNodeGets(leafids []int64, query, batch, field string, limit, offset int) ([]Endpoint, error) {
+	session := buildEndpointUnderNodeWhere(leafids, query, batch, field).Limit(limit, offset).OrderBy(field)
+	var objs []Endpoint
+	err := session.Find(&objs)
+	return objs, err
+}
+
+func EndpointIdsByIdents(idents []string) ([]int64, error) {
+	idents = str.TrimStringSlice(idents)
+	if len(idents) == 0 {
+		return []int64{}, nil
+	}
+
+	var objs []Endpoint
+	err := DB["portal"].In("ident", idents).Find(&objs)
+	if err != nil {
+		return []int64{}, err
+	}
+
+	cnt := len(objs)
+	ret := make([]int64, 0, cnt)
+	for i := 0; i < cnt; i++ {
+		ret = append(ret, objs[i].Id)
+	}
+
+	return ret, nil
+}
