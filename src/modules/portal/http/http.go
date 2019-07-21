@@ -23,6 +23,7 @@ var srv = &http.Server{
 
 var skipPaths = []string{
 	"/api/portal/auth/login",
+	"/api/portal/self/password",
 	"/api/portal/ping",
 }
 
