@@ -13,12 +13,12 @@ func GetCookieUser() gin.HandlerFunc {
 
 		value := session.Get("username")
 		if value == nil {
-			errors.Bomb("login first please")
+			errors.Bomb("unauthorized")
 		}
 
 		username := value.(string)
 		if username == "" {
-			errors.Bomb("login first please")
+			errors.Bomb("unauthorized")
 		}
 
 		c.Set("username", value)
