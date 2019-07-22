@@ -197,3 +197,60 @@ root账号来删除某个用户
 删除多个endpoint，用QueryString里的参数ids指定，逗号分隔
 
 ---
+
+`GET /api/portal/endpoints/bindings`
+
+查询endpoint的绑定关系，QueryString：idents，逗号分隔多个
+
+---
+
+`GET /api/portal/endpoints/bynodeids`
+
+根据节点id查询挂载了哪些endpoint，QueryString：ids，逗号分隔的多个节点id
+
+---
+
+`GET /api/portal/tree`
+
+查询整颗服务树
+
+---
+
+`GET /api/portal/tree/search`
+
+根据节点路径(path)查询服务树子树
+
+---
+
+`POST /api/portal/node`
+
+创建服务树节点，pid表示父节点id，leaf=0表示非叶子节点，leaf=1表示叶子节点，note是备注信息
+
+```
+{
+    "pid": 0,
+    "name": "",
+    "leaf": 0,
+    "note": ""
+}
+```
+
+---
+
+`PUT /api/portal/node/:id/name`
+
+服务树节点改名
+
+```
+{
+    "name": ""
+}
+```
+
+---
+
+`DELETE /api/portal/node/:id`
+
+删除服务树节点
+
+---
