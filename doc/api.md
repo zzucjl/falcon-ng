@@ -167,3 +167,33 @@ root账号来删除某个用户
 获取endpoint列表，用于【服务树】-【对象列表】页面，该页展示endpoint列表，搜索条件参数是query，每页显示条数是limit，页码是p，如果要做批量筛选，则同时要指定用哪个字段来筛选，只支持ident和alias，批量筛选的内容是batch
 
 ---
+
+`POST /api/portal/endpoint`
+
+导入endpoint，要求传入列表，每一条是ident::alias拼接在一起
+
+```
+{
+    "endpoints": []
+}
+```
+
+---
+
+`PUT /api/portal/endpoint/:id`
+
+修改一个endpoint的alias信息
+
+```
+{
+    "alias": ""
+}
+```
+
+---
+
+`DELETE /api/portal/endpoint`
+
+删除多个endpoint，用QueryString里的参数ids指定，逗号分隔
+
+---
