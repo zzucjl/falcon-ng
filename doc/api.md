@@ -532,3 +532,63 @@ root账号来删除某个用户
 ```
 
 ---
+
+`GET /api/portal/event/cur`
+
+获取某个节点下的未恢复报警列表，QueryString：
+
+- 节点路径：nodepath
+- 开始时间：stime
+- 结束时间：etime
+- 每页条数：limit
+- 查询条件：query
+- 优先级：priorities，逗号分隔的多个
+- 发送类型：sendtypes，逗号分隔的多个
+
+---
+
+`GET /api/portal/event/cur/:id`
+
+获取当前某一个未恢复的报警
+
+---
+
+`DELETE /api/portal/event/cur/:id`
+
+删除当前某一个未恢复的报警
+
+---
+
+`POST /api/portal/event/curs/claim`
+
+认领某一些未恢复的告警，避免告警升级到老板那里，id和nodepath只能传入一个，不能同时传入，也不能一个都不传，业务上的语义是：要么认领某一个告警事件，要么认领某个节点下的所有告警事件
+
+```
+{
+    "id": 1,
+    "nodepath": ""
+}
+```
+
+---
+
+`GET /api/portal/event/his`
+
+获取某个节点下的所有报警列表，QueryString：
+
+- 节点路径：nodepath
+- 开始时间：stime
+- 结束时间：etime
+- 每页条数：limit
+- 查询条件：query
+- 优先级：priorities，逗号分隔的多个
+- 发送类型：sendtypes，逗号分隔的多个
+- 事件类型：type
+
+---
+
+`GET /api/portal/event/his/:id`
+
+获取某个历史告警事件
+
+---
