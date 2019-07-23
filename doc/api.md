@@ -254,3 +254,281 @@ root账号来删除某个用户
 删除服务树节点
 
 ---
+
+`GET /api/portal/node/:id/endpoint`
+
+获取节点下面的endpoint列表，查询字符串使用query，每页展示多少条使用limit，页码使用p，如要批量筛选，一行一个，使用batch，同时必须指定field，即使用哪个字段进行批量筛选，有ident和alias可选
+
+---
+
+`POST /api/portal/node/:id/endpoint-bind`
+
+绑定一批endpoint到当前节点，del_old=1表示同时删除老的挂载关系
+
+```
+{
+    "idents": [],
+    "del_old": 0
+}
+```
+
+---
+
+`POST /api/portal/node/:id/endpoint-unbind`
+
+解绑endpoint和节点的挂载关系
+
+```
+{
+    "idents": []
+}
+```
+
+---
+
+`GET /api/portal/nodes/search`
+
+搜索节点，limit表示最多返回多少条，query是搜索条件
+
+---
+
+`GET /api/portal/nodes/leafids`
+
+获取节点对应的叶子节点的id，参数是ids，逗号分隔的多个节点id
+
+---
+
+`GET /api/portal/nodes/pids`
+
+获取节点对应的父、祖节点的id，参数是ids，逗号分隔的多个节点id
+
+---
+
+`GET /api/portal/nodes/byids`
+
+查询节点的信息，参数是ids，逗号分隔的多个节点id，返回这多个节点的信息
+
+---
+
+`GET /api/portal/node/:id/maskconf`
+
+获取报警屏蔽列表，因为已经是某个节点下的了，量比较少，后端不分页
+
+---
+
+`POST /api/portal/maskconf`
+
+创建一个报警屏蔽策略
+
+```
+{
+    "nid": 0,
+    "endpoints": [],
+    "metric": "",
+    "tags": "",
+    "cause": "",
+    "btime": 1563838361,
+    "etime": 1563838461
+}
+```
+
+---
+
+`PUT /api/portal/maskconf/:id`
+
+修改一个报警屏蔽策略
+
+```
+{
+    "endpoints": [],
+    "metric": "",
+    "tags": "",
+    "cause": "",
+    "btime": 1563838361,
+    "etime": 1563838461
+}
+```
+
+---
+
+`DELETE /api/portal/maskconf/:id`
+
+删除一个报警屏蔽策略
+
+---
+
+`GET /api/portal/node/:id/screen`
+
+获取screen列表，因为已经是某个节点下的了，量比较少，后端不分页
+
+---
+
+`POST /api/portal/node/:id/screen`
+
+创建screen
+
+```
+{
+    "name": ""
+}
+```
+
+---
+
+`PUT /api/portal/screen/:id`
+
+修改screen，其中node_id顺带也可以修改，这样screen相当于直接挪动了挂载节点
+
+```
+{
+    "name": "",
+    "node_id": 0
+}
+```
+
+---
+
+`DELETE /api/portal/screen/:id`
+
+删除某个screen
+
+---
+
+`GET /api/portal/screen/:id/subclass`
+
+获取screen下面的子类，返回的subclass按照weight字段排序
+
+---
+
+`POST /api/portal/screen/:id/subclass`
+
+创建subclass
+
+```
+{
+    "name": "",
+    "weight": 0
+}
+```
+
+---
+
+`PUT /api/portal/subclass`
+
+批量修改subclass
+
+```
+[
+    {
+        "id": 1,
+        "name": "a",
+        "weight": 1
+    },
+    {
+        "id": 2,
+        "name": "b",
+        "weight": 0
+    }
+]
+```
+
+---
+
+`DELETE /api/portal/subclass/:id`
+
+删除某个subclass
+
+---
+
+`PUT /api/portal/subclasses/loc`
+
+修改subclass的location，即所属的screen
+
+```
+[
+    {
+        "id": 1,
+        "screen_id": 1
+    },
+    {
+        "id": 2,
+        "screen_id": 1
+    }
+]
+```
+
+---
+
+`GET /api/portal/subclass/:id/chart`
+
+获取chart列表，根据chart的weight排序，不分页
+
+---
+
+`POST /api/portal/subclass/:id/chart`
+
+创建chart
+
+```
+{
+    "configs": "",
+    "weight": 0
+}
+```
+
+---
+
+`PUT /api/portal/chart/:id`
+
+修改某个chart的信息
+
+```
+{
+    "subclass_id": 1,
+    "configs": ""
+}
+```
+
+---
+
+`DELETE /api/portal/chart/:id`
+
+删除某个chart
+
+---
+
+`PUT /api/portal/charts/weights`
+
+修改chart的排序权重
+
+```
+{
+    "id": 1,
+    "weight": 9
+}
+```
+
+---
+
+`GET /api/portal/tmpchart`
+
+获取临时图，参数是QueryString：ids，逗号分隔的多个id
+
+---
+
+`POST /api/portal/tmpchart`
+
+创建一个临时图，返回生成的临时图的id列表
+
+```
+[
+    {
+        "configs": ""
+    },
+    {
+        "configs": ""
+    }
+]
+```
+
+---

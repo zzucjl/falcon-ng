@@ -34,7 +34,7 @@ func tmpChartPost(c *gin.Context) {
 
 func tmpChartGet(c *gin.Context) {
 	objs := []*model.TmpChart{}
-	idStr := mustQueryStr(c, "id")
+	idStr := mustQueryStr(c, "ids")
 	ids := strings.Split(idStr, ",")
 	for _, id := range ids {
 		i, err := strconv.ParseInt(id, 10, 64)
