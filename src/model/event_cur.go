@@ -13,28 +13,29 @@ import (
 var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
 type EventCur struct {
-	Id           int64     `json:"id"`
-	Sid          int64     `json:"sid"`
-	Sname        string    `json:"sname"`
-	NodePath     string    `json:"node_path"`
-	Endpoint     string    `json:"endpoint"`
-	Priority     int       `json:"priority"`
-	EventType    string    `json:"event_type"` // alert|recovery
-	Category     int       `json:"category"`
-	Status       uint16    `json:"status"`
-	HashId       uint64    `json:"hashid"  xorm:"hashid"`
-	Etime        int64     `json:"etime"`
-	Value        string    `json:"value"`
-	Info         string    `json:"info"`
-	Created      time.Time `json:"created" xorm:"created"`
-	Detail       string    `json:"detail"`
-	Users        string    `json:"users"`
-	Groups       string    `json:"groups"`
-	Nid          int64     `json:"nid"`
-	IgnoreAlert  int       `json:"ignore_alert"`
-	Claimants    string    `json:"claimants"`
-	NeedUpgrade  int       `json:"need_upgrade"`
-	AlertUpgrade string    `json:"alert_upgrade"`
+	Id            int64     `json:"id"`
+	Sid           int64     `json:"sid"`
+	Sname         string    `json:"sname"`
+	NodePath      string    `json:"node_path"`
+	Endpoint      string    `json:"endpoint"`
+	EndpointAlias string    `json:"endpoint_alias"`
+	Priority      int       `json:"priority"`
+	EventType     string    `json:"event_type"` // alert|recovery
+	Category      int       `json:"category"`
+	Status        uint16    `json:"status"`
+	HashId        uint64    `json:"hashid"  xorm:"hashid"`
+	Etime         int64     `json:"etime"`
+	Value         string    `json:"value"`
+	Info          string    `json:"info"`
+	Created       time.Time `json:"created" xorm:"created"`
+	Detail        string    `json:"detail"`
+	Users         string    `json:"users"`
+	Groups        string    `json:"groups"`
+	Nid           int64     `json:"nid"`
+	IgnoreAlert   int       `json:"ignore_alert"`
+	Claimants     string    `json:"claimants"`
+	NeedUpgrade   int       `json:"need_upgrade"`
+	AlertUpgrade  string    `json:"alert_upgrade"`
 }
 
 func UpdateEventCurPriority(hashid uint64, priority int) error {
@@ -59,7 +60,7 @@ func SaveEventCur(eventCur *EventCur) error {
 	}
 
 	if has {
-		if _, err := session.Where("hashid=?", eventCur.HashId).Cols("sid", "sname", "node_path", "endpoint", "priority", "category", "status", "etime", "detail", "value", "info", "users", "groups", "nid", "alert_upgrade", "need_upgrade").Update(eventCur); err != nil {
+		if _, err := session.Where("hashid=?", eventCur.HashId).Cols("sid", "sname", "node_path", "endpoint", "priority", "category", "status", "etime", "detail", "value", "info", "users", "groups", "nid", "alert_upgrade", "need_upgrade", "endpoint_alias").Update(eventCur); err != nil {
 			session.Rollback()
 			return err
 		}

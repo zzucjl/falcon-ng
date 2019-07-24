@@ -1,0 +1,49 @@
+---
+http:
+  listen: "0.0.0.0:8026"
+logger:
+  dir: "logs/sender"
+  level: "DEBUG"
+  keepHours: 24
+redis:
+  addr: "127.0.0.1:6379"
+  pass: "1234"
+  idle: 5
+  timeout:
+    conn: 500
+    read: 3000
+    write: 3000
+queue:
+  im: "/falcon-ng/send/im"
+  sms: "/falcon-ng/send/sms"
+  voice: "/falcon-ng/send/voice"
+  mail: "/falcon-ng/send/mail"
+worker:
+  im: 10
+  sms: 10
+  voice: 10
+  mail: 50
+send:
+  # two choice: shell|api
+  im: "shell"
+  # two choice: shell|api
+  sms: "shell"
+  # two choice: shell|api
+  voice: "shell"
+  # three choice: smtp|shell|api
+  mail: "shell"
+api:
+  im: "http://127.0.0.1:8000/im"
+  sms: "http://127.0.0.1:8000/sms"
+  voice: "http://127.0.0.1:8000/voice"
+  mail: "http://127.0.0.1:8000/mail"
+smtp:
+  from_name: "falcon-ng-alarm"
+  from_mail: "falcon-ng-alarm@example.com"
+  username: "falcon-ng-alarm@example.com"
+  password: "******"
+  server_host: "smtp.example.com"
+  server_port: 25
+  use_ssl: false
+auths:
+  - "srv-alarm-afd9a944652da76e9a8e67b65fc42d43"

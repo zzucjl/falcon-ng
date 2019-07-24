@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/toolkits/pkg/errors"
 
-	"github.com/didi/nightingale/src/model"
+	"github.com/open-falcon/falcon-ng/src/model"
 )
 
 type tmpChartForm struct {

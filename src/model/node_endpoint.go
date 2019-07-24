@@ -13,13 +13,13 @@ func (NodeEndpoint) TableName() string {
 	return "node_endpoint"
 }
 
-func NodeIdsByEndpointIds(endpointIds []int64) ([]int64, error) {
-	if endpointIds == nil || len(endpointIds) == 0 {
+func NodeIdsGetByEndpointId(endpointId int64) ([]int64, error) {
+	if endpointId == 0 {
 		return []int64{}, nil
 	}
 
 	var ids []int64
-	err := DB["portal"].Table("node_endpoint").In("endpoint_id", endpointIds).Select("node_id").Find(&ids)
+	err := DB["portal"].Table("node_endpoint").Where("endpoint_id = ?", endpointId).Select("node_id").Find(&ids)
 	return ids, err
 }
 

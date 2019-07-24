@@ -1,0 +1,51 @@
+---
+interval: 9
+http:
+  listen: "0.0.0.0:8028"
+logger:
+  dir: "logs/alarm"
+  level: "DEBUG"
+  keepHours: 24
+redis:
+  addr: "127.0.0.1:6379"
+  pass: "1234"
+  idle: 5
+  timeout:
+    conn: 500
+    read: 3000
+    write: 3000
+# low priority events will be merged
+queue:
+  high:
+    - "/falcon-ng/event/p1"
+  low:
+    - "/falcon-ng/event/p2"
+    - "/falcon-ng/event/p3"
+  callback: "/n9e/alarm/callback"
+merge:
+  hash: "falcon-ng-merge"
+  max: 100
+  interval: 10
+# notify support: voice, sms, mail, im
+notify:
+  p1: ["voice", "sms", "mail", "im"]
+  p2: ["sms", "mail", "im"]
+  p3: ["mail", "im"]
+# addresses accessible using browsers
+link:
+  stra: "http://portal.falcon-ng.com/#/monitor/strategy/%v"
+  event: "http://portal.falcon-ng.com/#/monitor/history/his/%v"
+  claim: "http://portal.falcon-ng.com/#/monitor/history/cur/%v"
+api:
+  sender:
+    server:
+      - 127.0.0.1:8026
+    auth: "srv-alarm-afd9a944652da76e9a8e67b65fc42d43"
+  portal:
+    server:
+      - 127.0.0.1:8022
+    auth: ""
+# clean history event
+cleaner:
+  days: 31
+  batch: 100

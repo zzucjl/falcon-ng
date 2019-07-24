@@ -3,29 +3,33 @@ package model
 import (
 	"strings"
 	"time"
+
+	"github.com/open-falcon/falcon-ng/src/dataobj"
+	"github.com/open-falcon/falcon-ng/src/modules/alarm/config"
 )
 
 type Event struct {
-	Id           int64     `json:"id"`
-	Sid          int64     `json:"sid"`
-	Sname        string    `json:"sname"`
-	NodePath     string    `json:"node_path"`
-	Endpoint     string    `json:"endpoint"`
-	Priority     int       `json:"priority"`
-	EventType    string    `json:"event_type"` // alert|recovery
-	Category     int       `json:"category"`
-	Status       uint16    `json:"status"`
-	HashId       uint64    `json:"hashid"  xorm:"hashid"`
-	Etime        int64     `json:"etime"`
-	Value        string    `json:"value"`
-	Info         string    `json:"info"`
-	Created      time.Time `json:"created" xorm:"created"`
-	Detail       string    `json:"detail"`
-	Users        string    `json:"users"`
-	Groups       string    `json:"groups"`
-	Nid          int64     `json:"nid"`
-	NeedUpgrade  int       `json:"need_upgrade"`
-	AlertUpgrade string    `json:"alert_upgrade"`
+	Id            int64     `json:"id"`
+	Sid           int64     `json:"sid"`
+	Sname         string    `json:"sname"`
+	NodePath      string    `json:"node_path"`
+	Endpoint      string    `json:"endpoint"`
+	EndpointAlias string    `json:"endpoint_alias"`
+	Priority      int       `json:"priority"`
+	EventType     string    `json:"event_type"` // alert|recovery
+	Category      int       `json:"category"`
+	Status        uint16    `json:"status"`
+	HashId        uint64    `json:"hashid"  xorm:"hashid"`
+	Etime         int64     `json:"etime"`
+	Value         string    `json:"value"`
+	Info          string    `json:"info"`
+	Created       time.Time `json:"created" xorm:"created"`
+	Detail        string    `json:"detail"`
+	Users         string    `json:"users"`
+	Groups        string    `json:"groups"`
+	Nid           int64     `json:"nid"`
+	NeedUpgrade   int       `json:"need_upgrade"`
+	AlertUpgrade  string    `json:"alert_upgrade"`
 }
 
 type EventDetail struct {
@@ -188,4 +192,47 @@ func EventAlertUpgradeUnMarshal(str string) (EventAlertUpgrade, error) {
 
 	err := json.Unmarshal([]byte(str), &obj)
 	return obj, err
+}
+
+func EventCnt(hashid uint64, stime, etime string, isUpgrade bool) (int64, error) {
+	session := DB["mon"].Where("hashid = ? and event_type = ? and created between ? and ?", hashid, config.ALERT, stime, etime)
+
+	if isUpgrade {
+		return session.In("status", GetFlagsByStatus([]string{STATUS_UPGRADE, STATUS_SEND})).Count(new(Event))
+	}
+
+	return session.In("status", GetFlagsByStatus([]string{STATUS_SEND})).Count(new(Event))
+}
+
+func EventAlertUpgradeMarshal(alertUpgrade dataobj.AlertUpgrade) (string, error) {
+	eventAlertUpgrade := EventAlertUpgrade{
+		Duration: alertUpgrade.Duration,
+		Level:    alertUpgrade.Level,
+	}
+
+	if alertUpgrade.Users == nil {
+		eventAlertUpgrade.Users = "[]"
+	} else {
+		upgradeUsers, err := json.Marshal(alertUpgrade.Users)
+		if err != nil {
+			return "", err
+		}
+
+		eventAlertUpgrade.Users = string(upgradeUsers)
+	}
+
+	if alertUpgrade.Groups == nil {
+		eventAlertUpgrade.Groups = "[]"
+	} else {
+		upgradeGroups, err := json.Marshal(alertUpgrade.Groups)
+		if err != nil {
+			return "", err
+		}
+
+		eventAlertUpgrade.Groups = string(upgradeGroups)
+	}
+
+	alertUpgradebytes, err := json.Marshal(eventAlertUpgrade)
+
+	return string(alertUpgradebytes), err
 }
