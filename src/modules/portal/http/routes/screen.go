@@ -6,7 +6,7 @@ import (
 	"github.com/toolkits/pkg/logger"
 	"github.com/toolkits/pkg/str"
 
-	"github.com/didi/nightingale/src/model"
+	"github.com/open-falcon/falcon-ng/src/model"
 )
 
 type ScreenForm struct {

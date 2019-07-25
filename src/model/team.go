@@ -2,10 +2,10 @@ package model
 
 import (
 	"fmt"
-	"pkg/str"
 
 	"github.com/go-xorm/xorm"
 	jsoniter "github.com/json-iterator/go"
+	"github.com/toolkits/pkg/str"
 )
 
 type Team struct {

@@ -5,7 +5,7 @@ import (
 	"github.com/toolkits/pkg/errors"
 	"github.com/toolkits/pkg/logger"
 
-	"github.com/didi/nightingale/src/model"
+	"github.com/open-falcon/falcon-ng/src/model"
 )
 
 type chartForm struct {

@@ -25,6 +25,10 @@ start_all()
 	test -x falcon-ng-syscollector && start syscollector
 	# http: 2189
 	test -x falcon-ng-logcollector && start logcollector
+	# http: 8028
+	test -x falcon-ng-alarm && start alarm
+	# http: 8026
+	test -x falcon-ng-sender && start sender
 }
 
 start()
@@ -77,6 +81,8 @@ stop_all()
 	test -x falcon-ng-judge && stop judge
 	test -x falcon-ng-index && stop index
 	test -x falcon-ng-portal && stop portal
+	test -x falcon-ng-alarm && stop alarm
+	test -x falcon-ng-sender && stop sender
 }
 
 stop()
@@ -154,6 +160,8 @@ build()
 		build_one judge
 		build_one transfer
 		build_one portal
+		build_one alarm
+		build_one sender
 		return
 	fi
 
@@ -184,7 +192,9 @@ pack()
 	falcon-ng-index etc/index.yml \
 	falcon-ng-judge etc/judge.yml \
 	falcon-ng-transfer etc/transfer.yml \
-	falcon-ng-portal etc/portal.yml
+	falcon-ng-portal etc/portal.yml \
+	falcon-ng-alarm etc/alarm.yml \
+	falcon-ng-sender etc/sender.yml
 }
 
 case "$1" in
