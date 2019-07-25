@@ -1,0 +1,44 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+
+from email import encoders
+from email.header import Header
+from email.mime.text import MIMEText
+from email.utils import parseaddr, formataddr
+import smtplib
+
+def _format_addr(s):
+    name, addr = parseaddr(s)
+    return formataddr(( \
+        Header(name, 'utf-8').encode(), \
+        addr.encode('utf-8') if isinstance(addr, unicode) else addr))
+
+smtp_server = "smtp.example.com"
+smtp_port = 587
+from_addr = "nightingale-alarm@example.com"
+password = "******"
+
+if len(sys.argv) != 4:
+    print "args illegal"
+    exit(0)
+
+to_addr = sys.argv[1]
+subject = sys.argv[2]
+fp = sys.argv[3]
+
+f = open(fp, 'r')
+content = f.read()
+f.close()
+
+msg = MIMEText(content, 'html', 'utf-8')
+msg['From'] = _format_addr(from_addr)
+msg['To'] = to_addr
+msg['Subject'] = Header(subject, 'utf-8').encode()
+
+server = smtplib.SMTP(smtp_server, smtp_port)
+server.ehlo()
+server.starttls()
+
+server.login(from_addr, password)
+server.sendmail(from_addr, to_addr.split(','), msg.as_string())
+server.quit()
