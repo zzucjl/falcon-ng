@@ -28,7 +28,7 @@ start_all()
 	# http: 8028
 	test -x falcon-ng-alarm && start alarm
 	# http: 8026
-    test -x falcon-ng-sender && start sender
+	test -x falcon-ng-sender && start sender
 }
 
 start()
