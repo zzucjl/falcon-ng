@@ -152,8 +152,12 @@ func Config(r *gin.Engine) {
 		collect.GET("", collectGet)
 		collect.PUT("", collectPut)
 		collect.DELETE("", collectsDel)
-		collect.GET("/byendpoint/:endpoint", collectGetByEndpoint)
 		collect.POST("/check", regExpCheck)
+	}
+
+	collects := r.Group("/api/portal/collects")
+	{
+		collects.GET("/:endpoint", collectGetByEndpoint)
 	}
 
 	stra := r.Group("/api/portal/stra").Use(middleware.GetCookieUser())

@@ -592,3 +592,68 @@ root账号来删除某个用户
 获取某个历史告警事件
 
 ---
+
+`GET /api/portal/collect/list`
+
+获取某个节点下面配置的采集策略，必传QueryString: nid表示节点id，后端不分页，返回全部
+
+---
+
+`GET /api/portal/collect`
+
+获取单个采集配置的详情，QueryString：type和id，都必传，type是port、proc、log之一。
+
+---
+
+`POST /api/portal/collect`
+
+创建一个采集策略
+
+```
+{
+    "type": "",
+    "data": {
+        # 端口、进程、日志配置不同，参阅model/collect.go
+    }
+}
+```
+
+---
+
+`PUT /api/portal/collect`
+
+修改一个采集策略
+
+```
+{
+    "type": "",
+    "data": {
+        # 端口、进程、日志配置不同，参阅model/collect.go
+    }
+}
+```
+
+---
+
+`DELETE /api/portal/collect`
+
+删除采集策略
+
+```
+{
+    "type": "",
+    "ids": []
+}
+```
+
+---
+
+`POST /api/portal/collect/check`
+
+校验用户输入的数据是否匹配正则
+
+```
+# TODO 补充
+```
+
+---
