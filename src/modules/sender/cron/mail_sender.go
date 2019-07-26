@@ -80,6 +80,7 @@ func sendMailBySmtp(mail *dataobj.Notify) {
 		cfg.Smtp.ServerHost,
 		cfg.Smtp.ServerPort,
 		cfg.Smtp.UseSSL,
+		cfg.Smtp.StartTLS,
 	)
 
 	err := smtp.Send(email.Mail{

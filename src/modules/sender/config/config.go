@@ -48,6 +48,7 @@ type SmtpSection struct {
 	ServerHost string `yaml:"server_host"`
 	ServerPort int    `yaml:"server_port"`
 	UseSSL     bool   `yaml:"use_ssl"`
+	StartTLS   bool   `yaml:"start_tls"`
 }
 
 type WorkerSection struct {
