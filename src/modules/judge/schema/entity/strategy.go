@@ -112,8 +112,6 @@ func (se *StrategyEntity) loop() {
 			se.Run()
 
 			// 执行完成, 等待下一个周期
-			// TODO: 有可能出现一次完整执行的耗时大于单个周期,导致迟迟执行不完
-			// 对于此类问题, 要有一个策略来处理
 			se.status = ENTITY_STATUS_WAITING
 		}
 	}
@@ -413,7 +411,6 @@ func (se *StrategyEntity) Run() {
 	)
 	c = make(chan struct{}, 1)
 
-	// 读锁是为了避免 map的读写冲突
 	se.RLock()
 	for _, judgement := range se.Judgements {
 		wg.Add(1)

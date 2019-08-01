@@ -22,12 +22,12 @@ var (
 
 type StorageBufferOption struct {
 	QueryTimeout       int `yaml:"queryTimeout"`       // 等待下游返回的时间
-	QueryConcurrency   int `yaml:"queryConcurrency"`   // 查询下游query的最大并发
+	QueryConcurrency   int `yaml:"queryConcurrency"`   // 查询下游的最大并发
 	QueryBatch         int `yaml:"queryBatch"`         // 并包大小
 	QueryMergeSize     int `yaml:"queryMergeSize"`     // 合并请求的窗口, 时间粒度的倍数
-	EnqueueTimeout     int `yaml:"enqueueTimeout"`     // query请求入队列超时
-	DequeueTimeout     int `yaml:"dequeueTimeout"`     // query请求出队超时
-	QueryQueueSize     int `yaml:"queryQueueSize"`     // query请求队列大小
+	EnqueueTimeout     int `yaml:"enqueueTimeout"`     // 请求入队列超时
+	DequeueTimeout     int `yaml:"dequeueTimeout"`     // 请求出队超时
+	QueryQueueSize     int `yaml:"queryQueueSize"`     // 请求队列大小
 	QueuedQueryTimeout int `yaml:"queuedQueryTimeout"` // 异步读超时
 	ShardsetSize       int `yaml:"shardsetSize"`       // shardset的大小
 	HistorySize        int `yaml:"historySize"`        // 数据缓存的点数

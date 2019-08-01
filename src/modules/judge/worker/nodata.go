@@ -261,7 +261,6 @@ func (s *NodataStrategy) Publish(events []*schema.Event) {
 	}
 }
 
-// TODO: 这里需要优化一下, 主要是include规则未配置时, 只需要比较index中endpoints列表即可
 // 避免无效的计算, 按照endpoint 一个个查询
 func (j *NodataJudgement) Run(endpoints []string) []string {
 	if len(endpoints) == 0 {
@@ -273,7 +272,6 @@ func (j *NodataJudgement) Run(endpoints []string) []string {
 	}
 	counters := make(map[string]struct{})
 	for _, endpoint := range endpoints {
-		// TODO: 修改这里的逻辑
 		result, err := stg.Index(
 			query.NewIndexRequest(endpoint, j.Metric, j.Include, j.Exclude),
 		)

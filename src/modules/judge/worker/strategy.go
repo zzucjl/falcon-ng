@@ -109,7 +109,7 @@ func parseStrategyFromRemote(s *model.Stra) (*schema.Strategy, error) {
 		Priority:   s.Priority,
 		Category:   s.Category,
 		Operator:   schema.LOGIC_OPERATOR_AND,
-		WindowSize: 180, // 硬编码, 数据断点时, 最多等待的周期数
+		WindowSize: 30, // 硬编码, 数据断点时, 最多等待的周期数
 		Endpoints:  endps,
 		Partition:  "/event/p" + strconv.Itoa(s.Priority), // event的队列名
 		Judgements: judgements,

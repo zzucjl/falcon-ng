@@ -1,0 +1,54 @@
+log:
+  path: "./logs/judge"
+  level: "DEBUG"
+  keepHours: 12
+storage:
+  queryTimeout: 1500
+  queryConcurrency: 10
+  queryBatch: 10
+  queryMergeSize: 30
+  enqueueTimeout: 200
+  dequeueTimeout: 500
+  queryQueueSize: 10000
+  queuedQueryTimeout: 2200
+  shardsetSize: 10
+  historySize: 5
+# transfer
+query:
+  addrs:
+    - 127.0.0.1:8041
+  maxConn: 10
+  maxIdle: 10
+  connTimeout: 1000
+  callTimeout: 2000
+  indexAddrs:
+  - "http://127.0.0.1:8030/api/index/counter/clude"
+  indexCallTimeout: 2000
+publisher:
+  # type: redis(for prod) | file(for dev)
+  # balance: round_robbin/random
+  type: "redis"
+  file:
+    name: "./logs/judge/event.log"
+  redis:
+    addrs:
+      - 127.0.0.1:6379
+    password: ""
+    balance: "round_robbin"
+    connTimeout: 200
+    readTimeout: 500
+    writeTimeout: 500
+    maxIdle: 10
+    idleTimeout: 100
+    bufferSize: 1024
+    bufferEnqueueTimeout: 200
+strategy:
+  addrs:
+    - 127.0.0.1:8022
+  partitionApi: /api/stra/effective?ip=%s
+  timeout: 5000
+  updateInterval: 9000
+  indexInterval: 60000
+identity:
+  specify: "127.0.0.1"
+  shell: "/usr/sbin/ifconfig `/usr/sbin/route|grep '^default'|awk '{print $NF}'`|grep inet|awk '{print $2}'|head -n 1"

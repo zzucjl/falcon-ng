@@ -2,13 +2,11 @@ package worker
 
 import (
 	"log"
-	"path"
 
 	"github.com/open-falcon/falcon-ng/src/modules/judge/schema/publish"
 	"github.com/open-falcon/falcon-ng/src/modules/judge/storage/buffer"
 	"github.com/open-falcon/falcon-ng/src/modules/judge/storage/query"
 
-	"github.com/open-falcon/falcon-ng/src/system"
 	"github.com/toolkits/pkg/file"
 	"github.com/toolkits/pkg/sys"
 )
@@ -22,13 +20,7 @@ type Options struct {
 	Identity  IdentityOption             `yaml:"identity"`
 }
 
-func InitOptions() Options {
-	dir := path.Join(system.Cwd, "etc")
-	cfg := path.Join(dir, "judge.local.yml")
-	if !file.IsExist(cfg) {
-		cfg = path.Join(dir, "judge.yml")
-	}
-
+func InitOptions(cfg string) Options {
 	var opts Options
 	err := file.ReadYaml(cfg, &opts)
 	if err != nil {
@@ -42,7 +34,6 @@ func NewDefaultOptions(querys []string,
 	index []string, config []string,
 	redis []string) Options {
 	return Options{
-		Http:      ":8080",
 		Log:       NewLoggerOption(),
 		Publisher: publish.NewRedisPublisherOption(redis),
 		Storage:   buffer.NewStorageBufferOption(),

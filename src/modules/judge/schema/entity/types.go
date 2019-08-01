@@ -30,7 +30,7 @@ type StrategyEntity struct {
 	concurrency      *nsema.Semaphore       // judgements的并发数
 	seriesCount      int                    // 曲线总数
 
-	Judgements map[uint32]*JudgementEntity // key是judgementEntity的唯一标识, 与曲线ID和节点ID有关
+	Judgements map[uint32]*JudgementEntity // key是judgementEntity的唯一标识, 与曲线ID
 	Executions []*ExecutionEntity          // 每个trigger关联一个metric, 每个metric关联一堆线
 }
 
@@ -49,17 +49,16 @@ type JudgementEntity struct {
 	Driver  AlertDriverEntity // 报警(解除)判断 驱动实体
 }
 
-// 不同指标的与条件在解析时会非常繁琐, 要做到tag相同才能判断
 type MetricEntity struct {
-	key     string         // key就是metric名, 后续可能会是counter, 比如 北京成单量&&上海成单量
+	key     string         // key就是metric名, 后续可能会是counter
 	ID      uint32         // 唯一索引, 只有一个元素
 	History buffer.History // 历史点, 运行时初始化
 }
 
 // ExecutionEntity 执行实体
 type ExecutionEntity struct {
-	sid int64  // 关联的策略ID, 打印日志时使用
-	key string // 本期的key就是metric
+	sid int64 // 关联的策略ID, 打印日志时使用
+	key string
 
 	EffectiveDay    *bitmap.BitMap    // size = 7
 	EffectiveMinute *bitmap.BitMap    // size = 1440

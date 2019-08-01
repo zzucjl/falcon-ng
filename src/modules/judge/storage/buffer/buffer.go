@@ -18,7 +18,7 @@ type StorageBuffer struct {
 	storage          ConcurrentMap   // 以ID为key的内部数据库
 	shardset         *shard.ShardSet // 其实是 ID生成器
 	queue            chan *QueryRequest
-	query            query.SeriesQueryManager // 之所以传一个结构体, 是因为不会改变, 也不会copy， 不用传地址
+	query            query.SeriesQueryManager
 	queryConcurrency *nsema.Semaphore
 }
 

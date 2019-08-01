@@ -7,10 +7,6 @@ import (
 	"github.com/open-falcon/falcon-ng/src/modules/judge/schema"
 )
 
-var (
-	defaultRecordSizeByThreshold = 2 // TODO:控制数组的大小, 保持在阈值*2 即可
-)
-
 // AlertPointDriver 点驱动模型, 只记录异常/恢复的时间, 不记录没有点的情况
 type AlertPointDriver struct {
 	AlertTimestamp      []int64 `json:"alert_timestamp"`       // 异常时间, 从小到大排列, 默认写入是有序的, 乱序的直接丢掉, 打印fatal日志

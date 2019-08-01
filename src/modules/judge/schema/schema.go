@@ -14,7 +14,7 @@ type Strategy struct {
 	Judgements []StrategyJudgement `json:"judgements"`  // 支持不同指标的与
 	Alert      StrategyAlert       `json:"alert"`       // 触发报警(恢复)的条件配置
 	Action     StrategyAction      `json:"action"`      // 报警后的动作
-	Partition  string              `json:"partition"`   // 事件推送的分片信息, 分布式alarm场景必须, 由config模块设置
+	Partition  string              `json:"partition"`   // 事件推送的分片信息, 分布式alarm场景必须
 	WindowSize int                 `json:"window_size"` // 数据断点时允许查询的最小起始时间
 	Endpoints  []string            `json:"endpoints"`   // 策略关联的endpoints
 	Updated    int64               `json:"updated"`     // 策略最后修改时间, 和同步/异步更新有关
@@ -90,7 +90,7 @@ type Event struct {
 }
 
 type History struct {
-	Key         string             `json:"-"`              // 用于计算event的hashid, 不能用曲线ID, 曲线ID可能会变
+	Key         string             `json:"-"`              // 用于计算event的hashid
 	Metric      string             `json:"metric"`         // 指标名
 	Tags        map[string]string  `json:"tags,omitempty"` // endpoint/counter
 	Granularity int                `json:"-"`              // alarm补齐数据时需要

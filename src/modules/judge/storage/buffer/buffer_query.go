@@ -50,7 +50,6 @@ func (b *StorageBuffer) lookup(ID uint32) (*SeriesBuffer, bool) {
 // Query 查询固定范围的所有点
 func (b *StorageBuffer) queuedQuery(ID uint32, start, end int64,
 	span int, resp chan *QueryResponse) {
-	// 0.start向前对齐, end向后对齐
 	// 1.从本地history查询, 将能查到的部分填充到结果里
 	// 2.如果足够直接返回给上一层; 否则 创建一个query request, 等待执行
 	// 3.执行完成后 将结果回写到history中; 如果执行超时, 返回上一层

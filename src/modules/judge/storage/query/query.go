@@ -45,7 +45,6 @@ func NewSeriesQueryManager(opts SeriesQueryOption) (SeriesQueryManager, error) {
 	return SeriesQueryManager{
 		opts:     opts,
 		connPool: conn,
-		// client:   client,
 	}, nil
 }
 

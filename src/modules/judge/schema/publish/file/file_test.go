@@ -20,10 +20,10 @@ func Test_Log(t *testing.T) {
 		Hashid:    uint64(111111),
 		Etime:     1234556,
 		History: []schema.History{schema.History{
-			Key:    "cpu.idle/host=mock",
+			Key:    "cpu.idle/endpoint=mock",
 			Metric: "cpu.idle",
 			Counter: map[string]string{
-				"host": "mock",
+				"endpoint": "mock",
 			},
 			Points: []*dataobj.RRDData{&dataobj.RRDData{
 				Timestamp: 12345678,

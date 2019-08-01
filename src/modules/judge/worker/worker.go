@@ -10,7 +10,6 @@ import (
 	"github.com/open-falcon/falcon-ng/src/modules/judge/schema/entity"
 	"github.com/open-falcon/falcon-ng/src/modules/judge/schema/publish"
 	filep "github.com/open-falcon/falcon-ng/src/modules/judge/schema/publish/file"
-	nsqp "github.com/open-falcon/falcon-ng/src/modules/judge/schema/publish/nsq"
 	redisp "github.com/open-falcon/falcon-ng/src/modules/judge/schema/publish/redis"
 	"github.com/open-falcon/falcon-ng/src/modules/judge/storage"
 	"github.com/open-falcon/falcon-ng/src/modules/judge/storage/buffer"
@@ -27,9 +26,9 @@ var (
 )
 
 // Start 全局worker
-func Start() {
+func Start(file string) {
 	// 初始化配置文件
-	opts := InitOptions()
+	opts := InitOptions(file)
 
 	ident, err := GetIdentity(opts.Identity)
 	if err != nil {
@@ -51,8 +50,6 @@ func Start() {
 
 	// 初始化publisher组件
 	switch opts.Publisher.Type {
-	case "nsq":
-		pub, err = nsqp.NewNsqPublisher(opts.Publisher.Nsq)
 	case "redis":
 		pub, err = redisp.NewRedisPublisher(opts.Publisher.Redis)
 	case "file":
@@ -141,7 +138,6 @@ func strategyManageLoop(first ...bool) error {
 	}
 
 	// 更新 && 删除 && 新增
-	// TODO: 清理logger中无效的ID列表
 	var (
 		updated int
 		newest  = make(map[int64]struct{})

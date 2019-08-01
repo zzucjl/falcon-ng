@@ -1,7 +1,6 @@
 package entity
 
 import (
-	"encoding/json"
 	"fmt"
 	"sort"
 	"time"
@@ -146,12 +145,6 @@ func (je *JudgementEntity) Run(
 			for j := range executions {
 				if executions[j].key == je.Metrics[i].key {
 					status, points, infos, op := executions[j].Run(stg, je.Metrics[i].ID, current, je.interval)
-					// 特殊使用, 需要执行json打印出详细的信息
-					if logger.GetSeverity(je.sid) == logger.DEBUG {
-						bytes, _ := json.Marshal(points)
-						logger.Debugf(je.sid, "judgement timestamp[%d] execution status:%s, series[%d], metric:%s points:%s",
-							current, schema.MapStatus(status), je.Metrics[i].ID, je.Metrics[i].key, string(bytes))
-					}
 
 					ifinal = logicalOperate(strategy.Operator, ifinal, status)
 					if _, found := ongoings[current]; !found {
@@ -204,12 +197,6 @@ func (je *JudgementEntity) Run(
 						je.Metrics[i].History = buffer.NewChainHistory(je.historySize)
 					}
 					je.Metrics[i].History.Write(points)
-					// DEBUG, 偶尔出现history没有点的情况
-					if logger.GetSeverity(je.sid) == logger.DEBUG {
-						bytes, _ := json.Marshal(points)
-						logger.Debugf(je.sid, "judgement write history, series[%d], debug history, write:%s",
-							je.Metrics[i].ID, string(bytes))
-					}
 				}
 			}
 		} else {
@@ -297,15 +284,25 @@ func (je *JudgementEntity) Run(
 					continue
 				}
 				for j := range finfos[i].Infos {
+					if len(finfos) > 1 {
+						if j == 0 {
+							info += "("
+						}
+					}
 					// info形如 happen(%s,3,1)=11 >10  其中 11是判断的中间结果, 10 是阈值
 					// 通过 %s 填充 metric 信息
 					info += fmt.Sprintf(finfos[i].Infos[j], series.Metric)
 					if j < len(finfos[i].Infos)-1 {
 						info += finfos[i].Op
 					}
+					if len(finfos) > 1 {
+						if j == len(finfos[i].Infos)-1 {
+							info += ")"
+						}
+					}
 				}
 				if i < len(finfos)-1 {
-					info += strategy.Operator
+					info += " " + strategy.Operator + " "
 				}
 			}
 			event.SetInfo(info)
