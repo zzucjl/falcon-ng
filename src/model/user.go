@@ -286,3 +286,9 @@ func UserNameGetByIds(ids string) ([]string, error) {
 	err := DB["uic"].Table("user").In("id", userIds).Select("username").Find(&names)
 	return names, err
 }
+
+func UserGetByIds(ids []int64) ([]User, error) {
+	var objs []User
+	err := DB["uic"].In("id", ids).Find(&objs)
+	return objs, err
+}

@@ -142,7 +142,7 @@ func Config(r *gin.Engine) {
 		event.DELETE("/cur/:id", eventCurDel)
 		event.GET("/his", eventHisGets)
 		event.GET("/his/:id", eventHisGetById)
-		event.POST("/cur/claim", eventCurClaim)
+		event.POST("/curs/claim", eventCurClaim)
 	}
 
 	collect := r.Group("/api/portal/collect").Use(middleware.GetCookieUser())
@@ -152,8 +152,12 @@ func Config(r *gin.Engine) {
 		collect.GET("", collectGet)
 		collect.PUT("", collectPut)
 		collect.DELETE("", collectsDel)
-		collect.GET("/byendpoint/:endpoint", collectGetByEndpoint)
 		collect.POST("/check", regExpCheck)
+	}
+
+	collects := r.Group("/api/portal/collects")
+	{
+		collects.GET("/:endpoint", collectGetByEndpoint)
 	}
 
 	stra := r.Group("/api/portal/stra").Use(middleware.GetCookieUser())
@@ -165,7 +169,7 @@ func Config(r *gin.Engine) {
 		stra.GET("/:sid", straGet)
 	}
 
-	stras := r.Group("/api/portal/stras").Use(middleware.GetCookieUser())
+	stras := r.Group("/api/portal/stras")
 	{
 		stras.GET("/effective", effectiveStrasGet)
 	}
