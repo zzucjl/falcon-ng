@@ -4,6 +4,11 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"os/signal"
+	"syscall"
+
+	"github.com/open-falcon/falcon-ng/src/modules/judge/logger"
+	"github.com/open-falcon/falcon-ng/src/modules/judge/worker"
 
 	"github.com/toolkits/pkg/file"
 	"github.com/toolkits/pkg/runner"
@@ -57,6 +62,18 @@ func aconf() {
 func main() {
 	aconf()
 	start()
+
+	worker.Start(*conf)
+
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
+	select {
+	case <-c:
+		logger.Info(0, "stop signal caught, try to stop judge server")
+		worker.Stop()
+	}
+	logger.Info(0, "judge server stopped succefully")
+	logger.Close()
 }
 
 func start() {
