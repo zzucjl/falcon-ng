@@ -46,6 +46,7 @@ func RecoveryWithWriter(out io.Writer) gin.HandlerFunc {
 				// custom error
 				if e, ok := err.(errors.PageError); ok {
 					c.JSON(200, gin.H{"err": e.Message})
+					c.Abort()
 					return
 				}
 
