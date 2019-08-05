@@ -14,7 +14,6 @@ type PortalYml struct {
 	HTTP   httpSection       `yaml:"http"`
 	LDAP   ldapSection       `yaml:"ldap"`
 	Judges map[string]string `yaml:"judges"`
-	Auths  []string          `yaml:"auths"`
 }
 
 type loggerSection struct {
