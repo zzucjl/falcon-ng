@@ -62,9 +62,15 @@ func endpointPut(c *gin.Context) {
 	renderMessage(c, endpoint.Update("alias"))
 }
 
+type endpointDelForm struct {
+	Ids []int64 `json:"ids"`
+}
+
 func endpointDel(c *gin.Context) {
-	ids := str.IdsInt64(queryStr(c, "ids", ""))
-	renderMessage(c, model.EndpointDel(ids))
+	var f endpointDelForm
+	errors.Dangerous(c.ShouldBind(&f))
+
+	renderMessage(c, model.EndpointDel(f.Ids))
 }
 
 func endpointBindingsGet(c *gin.Context) {
