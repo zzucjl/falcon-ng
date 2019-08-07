@@ -164,7 +164,7 @@ root账号来删除某个用户
 
 `GET /api/portal/endpoint`
 
-获取endpoint列表，用于【服务树】-【对象列表】页面，该页展示endpoint列表，搜索条件参数是query，每页显示条数是limit，页码是p，如果要做批量筛选，则同时要指定用哪个字段来筛选，只支持ident和alias，批量筛选的内容是batch
+获取endpoint列表，用于【服务树】-【对象列表】页面，该页展示endpoint列表，搜索条件参数是query，每页显示条数是limit，页码是p，如果要做批量筛选，则同时要指定用哪个字段(参数名字是field)来筛选，只支持ident和alias，批量筛选的内容是batch，即batch和field一般是同时出现的
 
 ---
 
@@ -194,7 +194,13 @@ root账号来删除某个用户
 
 `DELETE /api/portal/endpoint`
 
-删除多个endpoint，用QueryString里的参数ids指定，逗号分隔
+删除多个endpoint，ids参数放到request body里
+
+```
+{
+    "ids": [10000, 200000]
+}
+```
 
 ---
 
