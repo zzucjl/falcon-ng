@@ -41,6 +41,12 @@ func Config(r *gin.Engine) {
 		user.DELETE("/:id", userDel)
 	}
 
+	users := r.Group("/api/portal/users")
+	{
+		users.GET("/invite", userInviteGet).Use(middleware.GetCookieUser())
+		users.POST("/invite", userInvitePost)
+	}
+
 	team := r.Group("/api/portal/team").Use(middleware.GetCookieUser())
 	{
 		team.GET("", teamListGet)

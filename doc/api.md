@@ -656,10 +656,34 @@ root账号来删除某个用户
 
 `POST /api/portal/collect/check`
 
-校验用户输入的数据是否匹配正则
-
-```
-# TODO 补充
-```
+校验用户输入的数据是否匹配正则，跟商业版本数据结构一致
 
 ---
+
+`POST /api/portal/stra`
+
+新增告警策略，跟商业版本数据结构一致
+
+---
+
+`PUT /api/portal/stra`
+
+修改告警策略，跟商业版本数据结构一致
+
+---
+
+`DELETE /api/portal/stra`
+
+删除告警策略，跟商业版本数据结构一致
+
+---
+
+`GET /api/portal/stra`
+
+获取告警策略列表，跟商业版本数据结构一致
+
+---
+
+`GET /api/portal/stra/:id`
+
+获取单个告警策略，跟商业版本数据结构一致
