@@ -106,7 +106,7 @@ func offset(c *gin.Context, limit int, total interface{}) int {
 		limit = 10
 	}
 
-	page := queryInt(c, "p", 1)
+	page := queryInt(c, "page", 1)
 	return (page - 1) * limit
 }
 
