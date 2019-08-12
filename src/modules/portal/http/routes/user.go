@@ -57,8 +57,13 @@ func userAddPost(c *gin.Context) {
 }
 
 func userInviteGet(c *gin.Context) {
+	loginUser := cookieUsername(c)
+	if loginUser == "" {
+		errors.Bomb("unauthorized")
+	}
+
 	token := config.CryptoPass(fmt.Sprint(time.Now().UnixNano()))
-	err := model.InviteAdd(token, loginUsername(c))
+	err := model.InviteAdd(token, loginUser)
 	renderData(c, token, err)
 }
 

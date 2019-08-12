@@ -3,6 +3,7 @@ package routes
 import (
 	"strconv"
 
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/toolkits/pkg/errors"
 
@@ -131,6 +132,17 @@ func renderData(c *gin.Context, data interface{}, err error) {
 	}
 
 	renderMessage(c, err.Error())
+}
+
+func cookieUsername(c *gin.Context) string {
+	session := sessions.Default(c)
+
+	value := session.Get("username")
+	if value == nil {
+		errors.Bomb("unauthorized")
+	}
+
+	return value.(string)
 }
 
 func loginUsername(c *gin.Context) string {

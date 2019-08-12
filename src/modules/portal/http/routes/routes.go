@@ -43,7 +43,7 @@ func Config(r *gin.Engine) {
 
 	users := r.Group("/api/portal/users")
 	{
-		users.Use(middleware.GetCookieUser()).GET("/invite", userInviteGet)
+		users.GET("/invite", userInviteGet)
 		users.POST("/invite", userInvitePost)
 	}
 
