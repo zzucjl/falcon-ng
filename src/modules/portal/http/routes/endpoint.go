@@ -63,14 +63,22 @@ func endpointPut(c *gin.Context) {
 }
 
 type endpointDelForm struct {
-	Ids []int64 `json:"ids"`
+	Idents []string `json:"idents"`
 }
 
 func endpointDel(c *gin.Context) {
 	var f endpointDelForm
 	errors.Dangerous(c.ShouldBind(&f))
 
-	renderMessage(c, model.EndpointDel(f.Ids))
+	if f.Idents == nil || len(f.Idents) == 0 {
+		renderMessage(c, nil)
+		return
+	}
+
+	ids, err := model.EndpointIdsByIdents(f.Idents)
+	errors.Dangerous(err)
+
+	renderMessage(c, model.EndpointDel(ids))
 }
 
 func endpointBindingsGet(c *gin.Context) {
