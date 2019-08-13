@@ -111,7 +111,7 @@ func parseStrategyFromRemote(s *model.Stra) (*schema.Strategy, error) {
 		Operator:   schema.LOGIC_OPERATOR_AND,
 		WindowSize: 30, // 硬编码, 数据断点时, 最多等待的周期数
 		Endpoints:  endps,
-		Partition:  "/event/p" + strconv.Itoa(s.Priority), // event的队列名
+		Partition:  "/falcon-ng/event/p" + strconv.Itoa(s.Priority), // event的队列名
 		Judgements: judgements,
 		Alert:      alert,
 		Updated:    s.LastUpdated.Unix(),
