@@ -1,0 +1,31 @@
+cacheDuration: 7200 
+cleanInterval: 1800 
+persistInterval: 900
+rebuildWorker: 20
+buildWorker: 20
+defaultStep: 60
+logger:  
+  level: "DEBUG"
+  dir: "logs/index"
+  rotatenum: 3
+  rotatemb: 10
+http:
+  enabled: true
+  listen: "0.0.0.0:8030"
+  access: "access.log"
+rpc:
+  enabled: true
+  listen: "0.0.0.0:8031"
+limit:
+  ui: 1000000
+  cludeLogCounter: 100000
+  clude: 1000000
+  fullmatchLogCounter: 100000
+nsq:
+  enabled: true
+  lookupds:
+    - 127.0.0.1:4161
+  chan: "use_local_ip"
+  fullTopic: "full_index"
+  incrTopic: "incr_index"
+  worker: 10

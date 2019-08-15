@@ -21,3 +21,7 @@ ldap:
 # judge sharding, use judge's identity as cluster list
 judges:
   judge01: 127.0.0.1
+# just for single host test, use nginx in production
+proxy:
+  transfer: http://127.0.0.1:8040
+  index: http://127.0.0.1:8030

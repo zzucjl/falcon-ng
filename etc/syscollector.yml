@@ -1,0 +1,125 @@
+# the plugin directory, it will be executed if a shell in this directory 
+plugin:  "./plugin"
+# the port collect directory
+portPath: "./etc/port"
+# the port proc directory
+procPath: "./etc/proc"
+# ntp server list
+ntpServers: []
+# the endpoint of witch push to tsdb, if specify is nil will get by execute shell
+endpoint:
+  specify: ""
+  shell: "/usr/sbin/ifconfig `/usr/sbin/route|grep '^default'|awk '{print $NF}'`|grep inet|awk '{print $2}'|head -n 1"
+# logger config
+logger:
+  # DEBUG INFO WARNING ERROR
+  level: "DEBUG"
+  dir: "logs/collector"
+  rotatenum: 3
+  rotatemb: 100
+# http config
+http:
+  listen: "0.0.0.0:8042"
+# transfer config
+transfer:
+  enabled: true
+  # report addrs
+  addr:
+    - 127.0.0.1:8040
+  # report interval, unit is seconds
+  interval: 60
+  # call timeout
+  timeout: 1000
+# collector config
+collector:
+  # NIC prefix to collect 
+  ifacePrefix: ["eth"]
+  # mount point to collect
+  mountPoint: []
+  # mount point to ignore
+  mountIgnorePrefix: ["/var/lib"]
+  # sync collects from portal server
+  syncCollect: false
+  # portal server addrs
+  addrs: ["127.0.0.1:8022"]
+  # call portal timeout
+  timeout: 10
+  # the interval sync collectos
+  interval: 60
+ignoreMetrics: 
+  - cpu.core.idle
+  - cpu.core.util
+  - cpu.core.sys
+  - cpu.core.user
+  - cpu.core.nice
+  - cpu.core.guest
+  - cpu.core.irq
+  - cpu.core.softirq
+  - cpu.core.iowait
+  - cpu.core.steal
+# docker ignore metric
+#  - net.bandwidth.mbits
+#  - net.bandwidth.mbits.total
+#  - net.in.bits
+#  - net.in.bits.total
+#  - net.in.bits.total.percent
+#  - net.in.dropped
+#  - net.in.errs
+#  - net.in.percent
+#  - net.in.pps
+#  - net.out.bits
+#  - net.out.bits.total
+#  - net.out.bits.total.percent
+#  - net.out.dropped
+#  - net.out.errs
+#  - net.out.percent
+#  - net.out.pps
+#  - net.sockets.tcp.inuse
+#  - net.sockets.tcp.timewait
+#  - net.sockets.used
+#  - sys.fs.files.free
+#  - sys.fs.files.max
+#  - sys.fs.files.used
+#  - sys.fs.files.used.percent
+#  - sys.net.netfilter.nf_conntrack_count
+#  - sys.net.netfilter.nf_conntrack_count.percent
+#  - sys.net.netfilter.nf_conntrack_max
+#  - sys.ps.entity.total
+#  - sys.ps.process.total
+#  - cpu.guest
+#  - cpu.idle
+#  - cpu.iowait
+#  - cpu.irq
+#  - cpu.loadavg.1
+#  - cpu.loadavg.15
+#  - cpu.loadavg.5
+#  - cpu.nice
+#  - cpu.softirq
+#  - cpu.steal
+#  - cpu.switches
+#  - cpu.sys
+#  - cpu.user
+#  - cpu.util
+#  - mem.bytes.buffers
+#  - mem.bytes.cached
+#  - mem.bytes.free
+#  - mem.bytes.total
+#  - mem.bytes.used
+#  - mem.bytes.used.percent
+#  - mem.swap.bytes.free
+#  - mem.swap.bytes.total
+#  - mem.swap.bytes.used
+#  - mem.swap.bytes.used.percent
+#  - disk.inodes.free
+#  - disk.inodes.total
+#  - disk.inodes.used
+#  - disk.inodes.used.percent
+#  - disk.io.avgqu_sz
+#  - disk.io.avgrq_sz
+#  - disk.io.await
+#  - disk.io.read.bytes
+#  - disk.io.read.request
+#  - disk.io.svctm
+#  - disk.io.util
+#  - disk.io.write.bytes
+#  - disk.io.write.request

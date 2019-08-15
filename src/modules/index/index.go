@@ -4,8 +4,17 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"os/signal"
+	"syscall"
+
+	"github.com/open-falcon/falcon-ng/src/modules/index/backend/nsq"
+	"github.com/open-falcon/falcon-ng/src/modules/index/cache"
+	"github.com/open-falcon/falcon-ng/src/modules/index/config"
+	"github.com/open-falcon/falcon-ng/src/modules/index/cron"
+	"github.com/open-falcon/falcon-ng/src/modules/index/http"
 
 	"github.com/toolkits/pkg/file"
+	"github.com/toolkits/pkg/logger"
 	"github.com/toolkits/pkg/runner"
 )
 
@@ -34,6 +43,25 @@ func init() {
 	}
 }
 
+func main() {
+	aconf()
+	pconf()
+	start()
+
+	config.InitLogger()
+
+	cache.InitDB()
+	cache.RebuildFromDisk()
+
+	go cron.StartCleaner()
+	go cron.StartPersist()
+	go nsq.StartNsqWorker()
+
+	//go rpc.Start()
+	http.Start()
+	ending()
+}
+
 // auto detect configuration file
 func aconf() {
 	if *conf != "" && file.IsExist(*conf) {
@@ -54,9 +82,25 @@ func aconf() {
 	os.Exit(1)
 }
 
-func main() {
-	aconf()
-	start()
+// parse configuration file
+func pconf() {
+	if err := config.Parse(*conf); err != nil {
+		fmt.Println("cannot parse configuration file:", err)
+		os.Exit(1)
+	}
+}
+
+func ending() {
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
+	select {
+	case <-c:
+		fmt.Printf("stop signal caught, stopping... pid=%d\n", os.Getpid())
+	}
+
+	logger.Close()
+	http.Shutdown()
+	fmt.Println("sender stopped successfully")
 }
 
 func start() {

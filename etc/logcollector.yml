@@ -1,0 +1,27 @@
+max_cpu_rate": 10
+
+hostname:
+  specify: ""
+  shell: "/usr/sbin/ifconfig `/usr/sbin/route|grep '^default'|awk '{print $NF}'`|grep inet|awk '{print $2}'|head -n 1"
+logger:  
+  level: "DEBUG"
+  dir: "logs/logcollector"
+  rotatenum: 3
+  rotatemb: 10
+http:
+  enabled: true
+  listen: "0.0.0.0:8044"
+strategy:
+  sync_collect: true
+  timeout: 10
+  config_addrs:
+    - 127.0.0.1:8022
+  update_duration: 10
+  default_degree: 6
+  file_path: "./etc/log"
+worker:
+  worker_num: 10
+  queue_size: 1024000
+  push_interval: 5
+  push_url: "http://127.0.0.1:8002/api/syscollector/push"
+  wait_push: 0

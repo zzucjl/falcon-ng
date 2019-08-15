@@ -13,6 +13,7 @@ type PortalYml struct {
 	Logger loggerSection     `yaml:"logger"`
 	HTTP   httpSection       `yaml:"http"`
 	LDAP   ldapSection       `yaml:"ldap"`
+	Proxy  proxySection      `yaml:"proxy"`
 	Judges map[string]string `yaml:"judges"`
 }
 
@@ -36,6 +37,11 @@ type ldapSection struct {
 	AuthFilter string `yaml:"authFilter"`
 	TLS        bool   `yaml:"tls"`
 	StartTLS   bool   `yaml:"startTLS"`
+}
+
+type proxySection struct {
+	Transfer string `yaml:"transfer"`
+	Index    string `yaml:"index"`
 }
 
 var (

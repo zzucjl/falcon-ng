@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/didi/nightingale/src/modules/judge/storage/query"
-	"github.com/didi/nightingale/src/modules/judge/storage/series"
+	"github.com/open-falcon/falcon-ng/src/modules/judge/storage/query"
+	"github.com/open-falcon/falcon-ng/src/modules/judge/storage/series"
 
 	"github.com/stretchr/testify/assert"
 )
