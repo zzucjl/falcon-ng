@@ -14,6 +14,7 @@ import (
 	"github.com/toolkits/pkg/runner"
 
 	"github.com/open-falcon/falcon-ng/src/model"
+	"github.com/open-falcon/falcon-ng/src/modules/alarm/cache"
 	"github.com/open-falcon/falcon-ng/src/modules/alarm/config"
 	"github.com/open-falcon/falcon-ng/src/modules/alarm/cron"
 	"github.com/open-falcon/falcon-ng/src/modules/alarm/http"
@@ -51,6 +52,7 @@ func init() {
 func main() {
 	aconf()
 	pconf()
+	cache.Init()
 
 	config.InitLogger()
 	model.InitMySQL("uic", "portal", "mon")
