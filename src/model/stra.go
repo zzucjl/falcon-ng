@@ -257,6 +257,25 @@ func StrasList(name string, priority int, nid int64) ([]*Stra, error) {
 	return stras, err
 }
 
+func StrasAll() ([]*Stra, error) {
+	objs := make([]*Stra, 0)
+
+	err := DB["mon"].Find(&objs)
+	if err != nil {
+		return objs, err
+	}
+
+	stras := make([]*Stra, 0)
+	for _, obj := range objs {
+		err = obj.Decode()
+		if err != nil {
+			return stras, err
+		}
+		stras = append(stras, obj)
+	}
+	return stras, err
+}
+
 func GetPnids(nid int64) ([]int64, error) {
 	node, err := NodeGet("id", nid)
 	if err != nil {

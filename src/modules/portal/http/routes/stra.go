@@ -99,6 +99,11 @@ func strasGet(c *gin.Context) {
 	renderData(c, list, err)
 }
 
+func strasAll(c *gin.Context) {
+	list, err := model.StrasAll()
+	renderData(c, list, err)
+}
+
 func effectiveStrasGet(c *gin.Context) {
 	ip := mustQueryStr(c, "ip")
 	node, err := GetNodeBy(ip)

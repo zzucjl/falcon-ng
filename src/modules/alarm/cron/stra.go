@@ -38,7 +38,7 @@ func SyncStra() error {
 			url = "http://" + url
 		}
 
-		url = fmt.Sprintf("%s/api/stra", url)
+		url = fmt.Sprintf("%s/api/portal/stras", url)
 		resp, err := client.Get(url)
 		if err != nil {
 			logger.Errorf("sync stra failed, url: %s, err: %v", url, err)
@@ -59,7 +59,7 @@ func SyncStra() error {
 				continue
 			}
 			if dat.Err != "" {
-				logger.Errorf("response err: %s", err)
+				logger.Errorf("response err: %s", dat.Err)
 				continue
 			}
 

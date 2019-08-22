@@ -178,6 +178,7 @@ func Config(r *gin.Engine) {
 	stras := r.Group("/api/portal/stras")
 	{
 		stras.GET("/effective", effectiveStrasGet)
+		stras.GET("", strasAll)
 	}
 
 	transferProxy := r.Group("/api/transfer")
