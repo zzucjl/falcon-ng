@@ -182,6 +182,18 @@ func Config(r *gin.Engine) {
 
 	transferProxy := r.Group("/api/transfer")
 	{
-		transferProxy.GET("/data", transferReq)
+		transferProxy.GET("/req", transferReq)
+		transferProxy.POST("/data", transferReq)
+		transferProxy.POST("/data/ui", transferReq)
+		transferProxy.POST("/push", transferReq)
+	}
+
+	indexProxy := r.Group("/api/index")
+	{
+		indexProxy.POST("/metrics", indexReq)
+		indexProxy.POST("/tagkv", indexReq)
+		indexProxy.POST("/counter/fullmatch", indexReq)
+		indexProxy.POST("/counter/clude", indexReq)
+		indexProxy.POST("/counter/detail", indexReq)
 	}
 }
