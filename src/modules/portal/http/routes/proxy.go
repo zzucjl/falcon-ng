@@ -3,11 +3,11 @@ package routes
 import (
 	"net/http/httputil"
 	"net/url"
-	"pkg/errors"
 
 	"github.com/open-falcon/falcon-ng/src/modules/portal/config"
 
 	"github.com/gin-gonic/gin"
+	"github.com/toolkits/pkg/errors"
 )
 
 func transferReq(c *gin.Context) {
