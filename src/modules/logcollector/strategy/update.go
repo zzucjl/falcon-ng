@@ -126,7 +126,7 @@ func GetCollects() ([]*schema.Strategy, error) {
 		i := rand.Intn(len(config.Config.Strategy.ConfigAddrs))
 		addr := config.Config.Strategy.ConfigAddrs[i]
 
-		url := fmt.Sprintf("http://%s/api/collect/%s", addr, config.Hostname)
+		url := fmt.Sprintf("http://%s/api/portal/collects/%s", addr, config.Hostname)
 
 		_, _, errs := gorequest.New().Timeout(time.Duration(config.Config.Strategy.Timeout) * time.Second).Get(url).EndStruct(&res)
 		if len(errs) != 0 {

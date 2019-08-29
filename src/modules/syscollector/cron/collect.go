@@ -69,7 +69,7 @@ func getCollects() (CollectResp, error) {
 	i := rand.Intn(len(config.Config.Collector.Addrs))
 	addr := config.Config.Collector.Addrs[i]
 
-	url := fmt.Sprintf("http://%s/api/collect/%s", addr, config.Hostname)
+	url := fmt.Sprintf("http://%s/api/portal/collects/%s", addr, config.Hostname)
 
 	_, _, errs := gorequest.New().Timeout(time.Duration(config.Config.Collector.Timeout) * time.Second).Get(url).EndStruct(&res)
 	if len(errs) != 0 {

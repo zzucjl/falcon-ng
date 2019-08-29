@@ -14,7 +14,7 @@ endpoint:
 logger:
   # DEBUG INFO WARNING ERROR
   level: "DEBUG"
-  dir: "logs/collector"
+  dir: "logs/syscollector"
   rotatenum: 3
   rotatemb: 100
 # http config
